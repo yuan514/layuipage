@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layuiAdmin 分类管理 iframe 框</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+
+</head>
+<body>
+<style>
+    .layui-form-label {
+        width: 60px;
+    }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-tags" id="layuiadmin-app-form-tags"
+     style="padding-top: 30px; text-align: center;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">JS功能</label>
+        <div class="layui-input-inline">
+            <input type="text" disabled="disabled" name="js_name" lay-verify="required" placeholder="请输入..." autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">编号</label>
+        <div class="layui-input-block">
+            <input disabled="disabled" type="text" style="width:inherit" name="js_alias_id"
+                   lay-verify="title"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">JS代码</label>
+        <div class="layui-input-inline">
+            <textarea name="content" disabled="disabled" lay-verify="required" style="width: 600px; height: 260px;" autocomplete="off"
+                      class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script src="../../../url.js"></script>
+<script src="../../../layuiadmin/layui/function.js"></script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'upload', 'result'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , upload = layui.upload
+            , admin = layui.admin
+            , result = layui.result;
+
+        //   获取本条数据的id
+        var hrefs = window.location.href;
+        var wesid = hrefs.split('=')[1];
+
+        //编辑时  将获取到的站长id、域名、编号一次放入input框
+        admin.req({
+            type: 'GET',
+            dataType: "json",
+            url: domainurl+'/api/v1/switchjs/show/' + wesid,
+            done: function (res) {
+                $('input[name=userid]').val(res.data.userid);
+                $("input[name=domain_name]").val(res.data.domain_name);
+                $("input[name=js_alias_id]").val(res.data.alias);
+            }
+        })
+
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>展示模式控制</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/formSelects-v4.css" media="all">
+</head>
+<body>
+
+<style>
+    /* 这段样式只是用于演示 */
+    #LAY-component-nav .layui-nav-tree {
+        vertical-align: top;
+    }
+
+    .xm-select-title {
+        width: 300px;
+        height: inherit !important;
+        margin-left: 65px;
+        margin-top: 10px;
+    }
+
+    .xm-select-parent .xm-form-selected dl {
+        left: 65px;
+    }
+</style>
+
+<div class="layui-fluid" id="LAY-component-nav">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+
+            <div class="layui-card">
+
+                <div class="layui-card-body" style="padding: 15px;">
+                    <form class="layui-form" action="" lay-filter="component-form-group">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">站长ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" style="width:inherit" name="title" lay-verify="title"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:100px;">域名</label>
+                                <div class="layui-input-inline">
+                                    <select name="quiz">
+                                        <option value="0">请选择问题</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:100px;">操作系统</label>
+                                <div class="layui-input-inline">
+                                    <select name="quiz">
+                                        <option value="0">请选择问题</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:100px;">广告类型</label>
+                                <div class="layui-input-inline">
+                                    <select name="quiz">
+                                        <option value="0">请选择问题</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:100px;">广告尺寸</label>
+                                <div class="layui-input-inline">
+                                    <select name="quiz">
+                                        <option value="0">请选择问题</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:100px;">选择输出JS</label>
+                                <div class="layui-input-inline">
+                                    <select name="quiz">
+                                        <option value="0">请选择问题</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">时间</label>
+                            <div class="layui-input-block time">
+                                <input type="radio" name="time" value="0" title="不限" checked="checked">
+                                <input type="radio" name="time" value="1" title="定向">
+                                <input type="radio" name="time" value="2" title="屏蔽">
+                            </div>
+                            <div class="xm-select-title time_select" style="display:none;">
+                                <select name="" xm-select="select1" class="select">
+                                    <option value="">请选择时间</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">地域</label>
+                            <div class="layui-input-block area">
+                                <input type="radio" name="area" value="0" title="不限" checked="">
+                                <input type="radio" name="area" value="1" title="定向">
+                                <input type="radio" name="area" value="2" title="屏蔽">
+                            </div>
+                            <div class="layui-card-body layui-row layui-col-space10 area_checkbox"
+                                 style="display:none">
+                                <div class="layui-col-md12">
+                                    <label class="layui-form-label" style="width:100px;">省</label>
+                                    <input type="checkbox" id="owner_all" lay-filter="owner_all" title="全选"
+                                           lay-skin="primary">
+                                    <input type="checkbox" class="ownerCost" name="" title="陕西" lay-skin="primary"
+                                           checked>
+                                    <input type="checkbox" class="ownerCost" name="" title="北京" lay-skin="primary">
+                                    <input type="checkbox" class="ownerCost" name="" title="上海" lay-skin="primary">
+                                </div>
+                                <div class="layui-col-md12">
+                                    <label class="layui-form-label" style="width:100px;">市</label>
+                                    <input type="checkbox" id="owner_shi" lay-filter="owner_shi" title="全选"
+                                           lay-skin="primary">
+                                    <input type="checkbox" class="shi" name="" title="西安" lay-skin="primary">
+                                    <input type="checkbox" class="shi" name="" title="陕南" lay-skin="primary">
+                                    <input type="checkbox" class="shi" name="" title="咸阳" lay-skin="primary">
+                                    <input type="checkbox" class="shi" name="" title="渭南" lay-skin="primary">
+                                </div>
+                                <div class="layui-col-md12">
+                                    <label class="layui-form-label" style="width:100px;">一线城市</label>
+                                    <input type="checkbox" id="owner_one" lay-filter="owner_one" title="全选"
+                                           lay-skin="primary">
+                                    <input type="checkbox" class="one" name="" title="西安" lay-skin="primary">
+                                    <input type="checkbox" class="one" name="" title="陕南" lay-skin="primary">
+                                    <input type="checkbox" class="one" name="" title="咸阳" lay-skin="primary">
+                                    <input type="checkbox" class="one" name="" title="渭南" lay-skin="primary">
+                                </div>
+                                <div class="layui-col-md12">
+                                    <label class="layui-form-label" style="width:100px;">二线城市</label>
+                                    <input type="checkbox" id="owner_two" lay-filter="owner_two" title="全选"
+                                           lay-skin="primary">
+                                    <input type="checkbox" class="two" name="" title="西安" lay-skin="primary">
+                                    <input type="checkbox" class="two" name="" title="陕南" lay-skin="primary">
+                                    <input type="checkbox" class="two" name="" title="咸阳" lay-skin="primary">
+                                    <input type="checkbox" class="two" name="" title="渭南" lay-skin="primary">
+                                </div>
+                                <div class="layui-col-md12">
+                                    <label class="layui-form-label" style="width:100px;">其他</label>
+                                    <input type="checkbox" id="owner_else" lay-filter="owner_else" title="全选"
+                                           lay-skin="primary">
+                                    <input type="checkbox" class="else" name="" title="西安" lay-skin="primary">
+                                    <input type="checkbox" class="else" name="" title="陕南" lay-skin="primary">
+                                    <input type="checkbox" class="else" name="" title="咸阳" lay-skin="primary">
+                                    <input type="checkbox" class="else" name="" title="渭南" lay-skin="primary">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">系统/版本</label>
+                            <div class="layui-input-block xitong">
+                                <input type="radio" name="xitong" value="0" title="不限" checked="">
+                                <input type="radio" name="xitong" value="1" title="定向">
+                                <input type="radio" name="xitong" value="2" title="屏蔽">
+                            </div>
+                            <div class="xm-select-title xitongbanben" style="display:none">
+                                <select name="" xm-select="select2">
+                                    <option value="">请选择系统</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <select name="" xm-select="select3">
+                                    <option value="">请选择版本</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">浏览器</label>
+                            <div class="layui-input-block ll">
+                                <input type="radio" name="liulan" value="0" title="不限" checked="">
+                                <input type="radio" name="liulan" value="1" title="定向">
+                                <input type="radio" name="liulan" value="2" title="屏蔽">
+                            </div>
+                            <div class="xm-select-title ll_select" style="display:none">
+                                <select name="" xm-select="select5" class="select">
+                                    <option value="">请选择浏览器</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">屏幕大小</label>
+                            <div class="layui-input-block screen">
+                                <input type="radio" name="screen" value="0" title="不限" checked="">
+                                <input type="radio" name="screen" value="1" title="定向">
+                                <input type="radio" name="screen" value="2" title="屏蔽">
+                            </div>
+                            <div class="xm-select-title screen_select" style="display:none;">
+                                <select name="" xm-select="select6" class="select">
+                                    <option value="">请选择屏幕大小</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">手机品牌</label>
+                            <div class="layui-input-block phone">
+                                <input type="radio" name="phone" value="0" title="不限" checked="">
+                                <input type="radio" name="phone" value="1" title="定向">
+                                <input type="radio" name="phone" value="2" title="屏蔽">
+                            </div>
+                            <div class="xm-select-title phone_select" style="display:none;">
+                                <select name="" xm-select="select7" class="select">
+                                    <option value="">请选择手机品牌</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">运营商</label>
+                            <div class="layui-input-block yy">
+                                <input type="radio" name="yunying" value="0" title="不限" checked="">
+                                <input type="radio" name="yunying" value="1" title="定向">
+                                <input type="radio" name="yunying" value="2" title="屏蔽">
+                            </div>
+                            <div class="xm-select-title yy_select" style="display:none;">
+                                <select name="" xm-select="select8" class="select">
+                                    <option value="">请选择运营商</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width:100px;">来源</label>
+                            <div class="layui-input-block resource">
+                                <input type="radio" name="resource" value="0" title="不限" checked="">
+                                <input type="radio" name="resource" value="1" title="定向">
+                                <input type="radio" name="resource" value="2" title="屏蔽">
+                            </div>
+                            <div class="xm-select-title resource_select" style="display: none;">
+                                <select name="" xm-select="select4" class="select">
+                                    <option value="">请选择来源</option>
+                                    <option value="1">北京</option>
+                                    <option value="2">上海</option>
+                                    <option value="3">广州</option>
+                                    <option value="4">深圳</option>
+                                    <option value="5">天津</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-layout-admin">
+                            <div class="layui-input-block">
+                                <div class="layui-footer" style="left: 0;">
+                                    <button class="layui-btn" lay-submit=""
+                                            lay-filter="component-form-demo1">立即提交
+                                    </button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../../url.js"></script>
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index',//主入口模块
+            formSelects: 'formSelects-v4'
+        }).use(['index', 'contlist', 'form', 'table', 'jquery', 'formSelects'], function () {
+            var table = layui.table;
+            var formSelects = layui.formSelects,
+                form = layui.form;
+
+            formSelects.on('select1', function (id, vals, val, isAdd, isDisabled) {
+                //id:           点击select的id
+                //vals:         当前select已选中的值
+                //val:          当前select点击的值
+                //isAdd:        当前操作选中or取消
+                //isDisabled:   当前选项是否是disabled
+
+                //如果return false, 那么将取消本次操作
+                return false;
+            });
+
+
+//        省全选和全不选
+            form.on('checkbox(owner_all)', function (data) {
+                var a = data.elem.checked;
+                if (a == true) {
+                    $(".ownerCost").prop("checked", true);
+                    form.render('checkbox');
+                } else {
+                    $(".ownerCost").prop("checked", false);
+                    form.render('checkbox');
+                }
+            })
+
+//        市全选和全不选
+            form.on('checkbox(owner_shi)', function (data) {
+                var a = data.elem.checked;
+                if (a == true) {
+                    $(".shi").prop("checked", true);
+                    form.render('checkbox');
+                } else {
+                    $(".shi").prop("checked", false);
+                    form.render('checkbox');
+                }
+            })
+
+            //        一线全选和全不选
+            form.on('checkbox(owner_one)', function (data) {
+                var a = data.elem.checked;
+                if (a == true) {
+                    $(".one").prop("checked", true);
+                    form.render('checkbox');
+                } else {
+                    $(".one").prop("checked", false);
+                    form.render('checkbox');
+                }
+            })
+
+            //        一线全选和全不选
+            form.on('checkbox(owner_two)', function (data) {
+                var a = data.elem.checked;
+                if (a == true) {
+                    $(".two").prop("checked", true);
+                    form.render('checkbox');
+                } else {
+                    $(".two").prop("checked", false);
+                    form.render('checkbox');
+                }
+            })
+
+
+            //        一线全选和全不选
+            form.on('checkbox(owner_else)', function (data) {
+                var a = data.elem.checked;
+                if (a == true) {
+                    $(".else").prop("checked", true);
+                    form.render('checkbox');
+                } else {
+                    $(".else").prop("checked", false);
+                    form.render('checkbox');
+                }
+            })
+
+
+            //方法级渲染
+            table.render({
+                elem: '#LAY-app-content-tags'
+                , url: layui.setter.base + 'json/table/user.js'
+                , cols: [[
+                    {field: 'experience', title: '编号', fixed: true}
+                    , {field: 'id', title: '网站主ID', sort: true}
+                    , {field: 'username', title: '网站域名'}
+                    , {
+                        title: '操作',
+                        width: 150,
+                        align: 'center',
+                        fixed: 'right',
+                        toolbar: '#layuiadmin-app-cont-tagsbar'
+                    }
+                ]]
+                , page: true
+            });
+
+            var $ = layui.$, active = {
+                reload: function () {
+                    var demoReload = $('#test-table-demoReload');
+                    //执行重载
+                    table.reload('test-table-reload', {
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: {
+                            key: {
+                                id: demoReload.val()
+                            }
+                        }
+                    });
+                },
+                add: function () {
+//                添加
+                    layer.open({
+                        type: 2
+                        , title: '添加设置'
+                        , content: 'tagsform.html'
+                        , area: ['500px', '480px']
+                        , btn: ['确定', '取消']
+                        , yes: function (index, layero) {
+                            var othis = layero.find('iframe').contents().find("#layuiadmin-app-form-tags")
+                                , tags = othis.find('input[name="tags"]').val();
+                            if (!tags.replace(/\s/g, '')) return;
+                            table.reload('LAY-app-content-tags');
+                            layer.close(index);
+                        }
+                    });
+                }
+            };
+
+            $('.test-table-reload-btn .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            $('.layui-btn.layuiadmin-btn-tags').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            //系统版本
+            $('.xitong .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 1) {
+                    $('.xitongbanben').css({display: "block"});
+                } else if (val == 2) {
+                    $('.xitongbanben').css({display: "block"});
+                } else {
+                    $('.xitongbanben').css({display: "none"});
+                }
+            })
+
+
+//时间
+            $('.time .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 1) {
+                    $('.time_select').css({display: "block"});
+                } else if (val == 2) {
+                    $('.time_select').css({display: "block"});
+                } else {
+                    $('.time_select').css({display: "none"});
+                }
+            })
+
+
+            //地域
+            $('.area .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 1) {
+                    $('.area_checkbox').css({display: "block"});
+                } else if (val == 2) {
+                    $('.area_checkbox').css({display: "block"});
+                } else {
+                    $('.area_checkbox').css({display: "none"});
+                }
+            })
+
+
+            //屏幕大小
+            $('.screen .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                console.log(val);
+                if (val == 1) {
+                    $('.screen_select').css({display: "block"});
+                } else if (val == 2) {
+                    $('.screen_select').css({display: "block"});
+                } else {
+                    $('.screen_select').css({display: "none"});
+                }
+            })
+
+
+            //时间
+            $('.ll .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                console.log(val);
+                if (val == 1) {
+                    $('.ll_select').css({display: "block"});
+                } else if (val == 2) {
+                    $('.ll_select').css({display: "block"});
+                } else {
+                    $('.ll_select').css({display: "none"});
+                }
+            })
+
+
+            //地域
+            $('.area .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                console.log(val);
+                if (val == 1) {
+                    $('.area_checkbox').css({display: "block"});
+                } else if (val == 2) {
+                    $('.area_checkbox').css({display: "block"});
+                } else {
+                    $('.area_checkbox').css({display: "none"});
+                }
+            })
+
+
+            //屏幕大小
+            $('.phone .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                console.log(val);
+                if (val == 1) {
+                    $('.phone_select').css({display: "block"});
+                } else if (val == 2) {
+                    $('.phone_select').css({display: "block"});
+                } else {
+                    $('.phone_select').css({display: "none"});
+                }
+            })
+
+
+            //屏幕大小
+            $('.yy .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                console.log(val);
+                if (val == 1) {
+                    $('.yy_select').css({display: "block"});
+                } else if (val == 2) {
+                    $('.yy_select').css({display: "block"});
+                } else {
+                    $('.yy_select').css({display: "none"});
+                }
+            })
+
+
+            //来源    获取当前的input框的value值
+            $('.resource .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 1) {
+                    $('.resource_select').css({display: "block"});
+                } else if (val == 2) {
+                    $('.resource_select').css({display: "block"});
+                } else {
+                    $('.resource_select').css({display: "none"});
+                }
+            })
+
+        });
+    </script>
+</body>
+</html>

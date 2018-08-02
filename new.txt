@@ -1,0 +1,11 @@
+文档：
+此页面沿用iframe
+站长列表：src/component/nav/index.html
+        网站主域名列表 :   src/component/nav/nav_wes.html
+网站主域名列表：src/component/tabs/index.html
+
+
+ 展示模式控制  :  src/component/nav/nav_control.html
+ 查看         :  src/component/nav/look.html
+ 添加、编辑   :   src/component/nav/tagsform.html
+ 查看  :   src/component/nav/check.html

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>网站主域名列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/autocomplete/jquery-ui.min.css">
+    <script src="../../../layuiadmin/autocomplete/jquery.min.js"></script>
+    <script src="../../../layuiadmin/autocomplete/jquery-ui.min.js"></script>
+</head>
+<body>
+<style>
+    /* 这段样式只是用于演示 */
+    #LAY-component-nav .layui-nav-tree {
+        vertical-align: top;
+    }
+</style>
+
+<div class="layui-fluid" id="LAY-component-nav">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">网站主域名列表</div>
+                <div class="layui-card-body">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item demoTable">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">网站主ID</label>
+                                <div class="layui-input-block" style="margin-left:90px;">
+                                    <input type="text" name="domainname_line" lay-verify="required|validateid" id="domainnameline" placeholder="请输入"
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">站点ID</label>
+                                <div class="layui-input-block" style="margin-left:90px;">
+                                    <input type="text" name="domain_id" id="domainidline" placeholder="请输入"
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">站点</label>
+                                <div class="layui-input-block" style="margin-left:60px;">
+                                    <input type="text" name="domain_url" id="roadline" placeholder="请输入"
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">网站类型</label>
+                                <div class="layui-input-block layui-form" style="margin-left:100px;"
+                                     lay-filter="set_domain_type">
+                                    <select name="domain_type" id="domain_type" class="domain_type" lay-search="">
+                                        <option value="0">请选择网站类型</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="layui-btn searchInput" data-type="reload">搜索</button>
+                        </div>
+                    </div>
+
+                    <table class="layui-hide" id="test-table-reload" lay-filter="user"></table>
+                    <script type="text/html" id="status">
+                        {{#  if(d.status == 0){ }}
+                        <span class="layui-badge layui-bg-gray">新增待审</span>
+                        {{#  } else if(d.status == 1 ){ }}
+                        <span class="layui-badge layui-bg-orange">拒绝</span>
+                        {{#  } else if(d.status ==2 ){ }}
+                        <span class="layui-badge layui-bg-cyan">锁定</span>
+                        {{#  } else if(d.status == 3){ }}
+                        <span class="layui-badge layui-bg-blue">正常</span>
+                        {{#  } else if(d.status == 4){ }}
+                        <span class="layui-badge layui-badge">修改待审</span>
+                        {{# } }}
+                    </script>
+                    <script type="text/html" id="usernameTpl">
+                        <a lay-href="component/nav/nav_control.html?table-demo-id={{d.id}}"
+                           class="layui-table-link"
+                           target="_blank">设置<span style="display:none">域名：{{d.domain_name}}</span></a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../url.js"></script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'result','form'], function () {
+        var table = layui.table,
+            admin = layui.admin,
+            result = layui.result,
+            form=layui.form;
+
+        //方法级渲染
+        table.render({
+            elem: '#test-table-reload'
+            , url: domainurl + '/api/v1/site/list'
+            ,where:{
+                accessToken:layui.data('layuiAdmin').accessToken
+            }
+            , cols: [[
+                {field: 'userid', title: '网站主ID', sort: true, fixed: true}
+                ,{field: 'id', title: '站点ID'}
+                , {field: 'classname', title: '网站类型'}
+                , {field: 'domain_name', title: '站点'}
+                , {field: 'status', templet: '#status', title: '状态',}
+                , {field: 'experience', templet: '#usernameTpl', title: '展示控制'}
+//                , {field: 'score', templet: '#usernameTpldone', title: 'JS标签设置详情'}
+            ]],
+            id:'testReload'
+            , page: true
+        });
+
+        //   获取网站类型
+        admin.req({
+            type: 'GET',
+            dataType: "json",
+            url: domainurl + '/api/v1/class',//url
+            done: function (res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    result.setSelect(res, 'domain_type', res.data, 'classid', 'classname', '请选择网站类型');
+                }
+            }
+        })
+
+        var $ = layui.$, active = {
+            reload: function () {
+                var id=$('#domainidline')
+                var domain_name=$('#roadline');
+                var sitetype=$('#domain_type')
+                var domainnameline=$("#domainnameline")
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        id:id.val(),
+                        domain_name:domain_name.val(),
+                        sitetype: sitetype.val(),
+                        userid:domainnameline.val()
+                    }
+                });
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        $('.test-table-reload-btn .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        $(function () {
+            admin.req({
+                type: 'GET',
+                dataType: "json",
+                url: domainurl + '/api/v1/site/list',
+                done: function (res) {
+                    var domainidArr = [];
+                    var domainArr = [];
+                    var domainnameArr=[];
+                    for (var i = 0; i < res.data.length; i++) {
+                        domainidArr.push(res.data[i].id.toString());
+                        domainnameArr.push(res.data[i].userid.toString())
+                        domainArr.push(res.data[i].domain_name);
+                    }
+                    $("#domainnameline").autocomplete({
+                        source:
+                            function (request, response) {
+                                var results = $.ui.autocomplete.filter(domainnameArr, request.term);
+                                response(results.slice(0, 10));//只显示自动提示的前十条数据
+                            },
+                        messages: {
+                            noResults: '',
+                            results: function () {
+                            }
+                        },
+                    });
+                    $("#roadline").autocomplete({
+                        source:
+                            function (request, response) {
+                                var results = $.ui.autocomplete.filter(domainArr, request.term);
+                                response(results.slice(0, 10));//只显示自动提示的前十条数据
+                            },
+                        messages: {
+                            noResults: '',
+                            results: function () {
+                            }
+                        },
+                    });
+                    $("#domainidline").autocomplete({
+                        source:
+                            function (request, response) {
+                                var results = $.ui.autocomplete.filter(domainidArr, request.term);
+                                response(results.slice(0, 10));//只显示自动提示的前十条数据
+                            },
+                        messages: {
+                            noResults: '',
+                            results: function () {
+                            }
+                        },
+                    });
+                }
+            })
+        });
+
+        //        网站主id做校验
+        function IsInteger(Str) {
+            Str = "" + Str;
+            RegularExp = /^[1-9][0-9]*$/;
+            if (RegularExp.test(Str)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function checkPassenger() {
+            var passengerValid = true;
+            obj = document.getElementById("domainnameline");
+            if(obj.value!=""){
+                if (!IsInteger(obj.value)) {
+                    layer.msg("请输入正确网站主ID");
+                    obj.focus();
+                    passengerValid = false;
+                    return false;
+                }
+            }
+            domainobj = document.getElementById("domainidline");
+            if(domainobj.value!=""){
+                if (!IsInteger(domainobj.value)) {
+                    layer.msg("请输入正确站点ID");
+                    domainobj.focus();
+                    passengerValid = false;
+                    return false;
+                }
+            }
+        }
+
+        $('.searchInput').click(checkPassenger)
+
+
+    });
+</script>
+</body>
+</html>

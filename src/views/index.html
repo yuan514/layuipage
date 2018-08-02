@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>广告投放策略</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport"
+			  content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<script>
+			/^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+		</script>
+		<script src="../url.js"></script>
+		<script src="../layuiadmin/layui/layui.js"></script>
+		<script>
+			layui.config({
+				base: '../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index'], function () {
+				var $ = layui.jquery
+						, admin = layui.admin
+						, setter = layui.setter
+						, request = setter.request;
+
+				var response = setter.response;
+				var tokenName = request.tokenName;
+				var tokenStr = layui.data(setter.tableName)[request.tokenName];
+
+				$.ajax({
+					type: 'GET',
+					dataType: "json",
+					url: domainurl + '/api/v1/checkLogin',
+					data: {
+						accessToken: tokenStr
+					},
+					success: function (res) {
+						var statusCode = response.statusCode;
+						if (res[response.statusName] == statusCode.logout) {
+
+							//清空本地记录的 token
+							layui.data(setter.tableName, {
+								key: setter.request.tokenName
+								, remove: true
+							});
+							location.href = 'user/login.html';
+						} else {
+							location.href = './main.html';
+						}
+
+					}
+				});
+			});
+		</script>
+	</head>
+	<body class="layui-layout-body">
+	</body>
+</html>
+
+

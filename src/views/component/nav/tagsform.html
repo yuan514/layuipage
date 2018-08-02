@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layuiAdmin 分类管理 iframe 框</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+
+</head>
+<body>
+<style>
+    .layui-form-label {
+        width: 60px;
+    }
+
+    .layui-form-select dl {
+        max-height: 205px;
+    }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-tags" id="layuiadmin-app-form-tags"
+     style="padding-top: 30px; text-align: center;">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">JS功能 <span style="color:red">*</span></label>
+        <div class="layui-input-inline">
+            <input type="text" name="js_name" lay-verify="required" placeholder="请输入..." autocomplete="off"
+                   class="layui-input">
+        </div>
+        <span style="display:block;float:left;color:#66666687;line-height: 38px;">长度不能超过50字符</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">编号 <span style="color:red">*</span></label>
+        <div class="layui-input-inline layui-form" lay-filter="set_js_alias_id">
+            <select name="js_alias_id" id="js_alias_id"
+                    lay-filter="js_alias_id" lay-verify="required">
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">JS代码 <span style="color:red">*</span></label>
+        <div class="layui-input-inline">
+            <textarea name="content" lay-verify="required" style="width: 600px; height: 260px;" autocomplete="off"
+                      class="layui-textarea"></textarea>
+        </div>
+
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script src="../../../url.js"></script>
+<script src="../../../layuiadmin/layui/function.js"></script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'upload', 'result'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , upload = layui.upload
+            , admin = layui.admin
+            , result = layui.result;
+
+
+        var hrefs = window.location.href;
+        var siteid = hrefs.split('=')[1];
+
+
+        admin.req({
+            type: 'GET',
+            dataType: "json",
+            url: domainurl + '/api/v1/jsids',//url
+            data: {
+                siteid: siteid
+            },
+            done: function (res) {
+                if (res.data.length == 0) {
+                    layer.msg("暂无可添加js编号")
+                } else if (res.data.length > 0) {
+//                    result.setSelect(res, 'js_alias_id', res.data, 'id', 'alias', '请选择编号');
+                    var selectStr='<option value=\"\"></option>'
+                    for (var i=0;i<res.data.length;i++){
+                        selectStr+='<option value="'+res.data[i].id+'">'+res.data[i].alias+'</option>'
+                    }
+                    $('#js_alias_id').html(selectStr);
+                    form.render("select");
+                }
+
+            }
+        })
+
+    })
+</script>
+</body>
+</html>

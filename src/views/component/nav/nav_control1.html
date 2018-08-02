@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>展示模式控制</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/formSelects-v4.css">
+    <!--<script src="../../../layuiadmin/layui/lay/modules/form.js"></script>-->
+</head>
+<body>
+<style>
+    /* 这段样式只是用于演示 */
+
+    #LAY-component-nav .layui-nav-tree {
+        vertical-align: top;
+    }
+
+    .xm-select-title {
+        width: 300px;
+        /*height: inherit !important;*/
+        margin-left: 65px;
+        margin-top: 10px;
+    }
+    .layui-form-item{
+        margin-top:35px;
+    }
+    .xm-select-parent .xm-form-selected dl {
+        left: 65px;
+    }
+
+    #zone {
+        display: none;
+        height: 36px;
+    }
+
+    #sel_box {
+        margin-left: 130px;
+        position: relative;
+        height: 18px;
+        width: 168px;
+        border: 1px solid #E2E2E2;
+        border-radius: 5px;
+    }
+
+    #sanjiao {
+        display: inline-block;
+        margin-left: 30px;
+        border: 0 solid #fff;
+        border-width: 8px 5px 0;
+        border-color: #999999 #FFFFFF;
+        width: 0;
+        overflow: hidden;
+        height: 0;
+    }
+
+    #pro_list {
+        display: none;
+        position: absolute;
+        width: 200px;
+        top: 39px;
+        height: 300px;
+        overflow: scroll;
+        left: 0px;
+        z-index: 10000;
+        background: #FFFFFF;
+        cursor: pointer;
+        overflow-x: hidden;
+        border: 1px solid #E2E2E2;
+        border-radius: 5px;
+    }
+
+    #pro_list::-webkit-scrollbar {
+        display: none;
+    }
+
+    #pro_list .pro_item {
+        width: 200px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+    }
+
+    #sec_list {
+        display: none;
+        position: absolute;
+        width: 160px;
+        left: 210px;
+        top: 39px;
+        cursor: pointer;
+        background: #FFFFFF;
+        z-index: 10000;
+        border: 1px solid #E2E2E2;
+        border-radius: 5px;
+        padding-left: 10px;
+    }
+
+    #sec_list .sec_item {
+        display: block;
+        width: 100px;
+        height: 18px;
+        line-height: 18px;
+        text-align: left;
+        padding-top: 10px;
+    }
+
+    #city_list {
+        display: none;
+        position: absolute;
+        padding-left: 10px;
+        width: 120px;
+        left: 380px;
+        top: 39px;
+        background: #FFFFFF;
+        z-index: 10000;
+        border: 1px solid #E2E2E2;
+        border-radius: 5px;
+    }
+</style>
+<div class="layui-fluid" id="LAY-component-nav">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card-header">展示模式控制</div>
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">SwitchJS设置</li>
+                            <li>JS标签设置</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-card">
+                                    <div class="layui-card-body">
+                                        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                                            <div class="layui-form-item">
+                                                <div class="layui-card-header layuiadmin-card-header-auto"
+                                                     style="width:100px;float:left">
+                                                    <button class="layui-btn layuiadmin-btn-tags" data-type="add">添加
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <table class="layui-hide" id="LAY-app-content-tags-domain"
+                                               lay-filter="LAY-app-content-tags-domain"></table>
+                                        <script type="text/html" id="layuiadmin-app-cont-tagsbar">
+                                            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
+                                                    class="layui-icon layui-icon-edit"></i>编辑</a>
+                                            <a class="layui-btn layui-bg-green layui-btn-xs" lay-event="check"><i
+                                                    class="layui-icon layui-icon-read"></i>查看</a>
+                                            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="abolish"><i
+                                                    class="layui-icon layui-icon-delete"></i>清空配置</a>
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-card-body" style="padding: 15px;">
+                                    <form class="layui-form form-create-sub"
+                                          action="/api/v1/sitejsconf/create"
+                                          lay-filter="component-form-group" method="post">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">网站主ID</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" style="width:inherit" name="userid"
+                                                       lay-verify="title"
+                                                       autocomplete="off" class="layui-input" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width:100px;">域名</label>
+                                                <div class="layui-input-inline layui-form" lay-filter="set_domain_name">
+                                                    <select name="domain_name" id="domain_name"
+                                                            lay-filter="domain_name">
+                                                        <option value="0">请选择域名</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width:100px;">广告分类</label>
+                                                <div class="layui-input-inline layui-form" lay-filter="set_os">
+                                                    <select name="os" id="os" lay-filter="os">
+                                                        <option value="0">请选择广告分类</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width:100px;">广告模式</label>
+                                                <div class="layui-input-inline layui-form" lay-filter="set_tpl">
+                                                    <select name="tpl" id="tpl" lay-filter="tpl">
+                                                        <option value="0">请选择广告模式</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width:100px;">广告样式</label>
+                                                <div class="layui-input-inline layui-form" lay-filter="set_size">
+                                                    <select name="size" id="size" lay-filter="size">
+                                                        <option value="0">请选择广告样式</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width:100px;">选择输出JS</label>
+                                                <div class="layui-input-inline layui-form" lay-filter="set_js">
+                                                    <select name="js" id="js" lay-filter="js">
+                                                        <option value="0">请选择输出JS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--<div style="margin-left:180px;margin-top:20px;" class="btn_span"><span-->
+                                                <!--style="width:100px;height:40px;line-height:40px;"-->
+                                                <!--class="layui-badge layui-bg-green">提交查询</span></div>-->
+                                        <div class="layui-form-item" style="margin-top:50px;">
+                                            <label class="layui-form-label" style="width:100px;">模拟器屏蔽</label>
+                                            <div class="layui-input-block moni" layui-filter="set_isopen">
+                                                <input type="radio" name="isOpen" value="1" title="开"
+                                                       checked="checked">
+                                                <input type="radio" name="isOpen" value="0" title="关">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">时间</label>
+                                            <div class="layui-input-block time" lay-filter="setp_2">
+                                                <input type="radio" name="controllType[2]" value="0" title="不限"
+                                                       checked="checked">
+                                                <input type="radio" name="controllType[2]" value="1" title="定向">
+                                                <input type="radio" name="controllType[2]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title time_select conf-write-2" style="display:none;"
+                                                 lay-filter="set_2">
+                                                <select name="controll[2]" xm-select="2" id="selecttime" >
+                                                    <!--<option value="" style="position:absolute;top:0;">请选择时间</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">地域</label>
+                                            <div class="layui-input-block area">
+                                                <input type="radio" name="controllType[1]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[1]" value="1" title="定向">
+                                                <input type="radio" name="controllType[1]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="layui-card-body layui-row layui-col-space10 area_checkbox conf-write-1"
+                                                 style="display:none">
+                                                <div class="layui-col-md12 shis">
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-md12 sheng area_checkbox" id="zone">
+                                                <label class="layui-form-label"
+                                                       style="width:100px;float: left;">省</label>
+                                                <div class="layui-card-body layui-row layui-col-space10 " id="sel_box">
+                                                    <p id="sel_pro" style="position: absolute; top:5px;">下拉选择省级列表<span
+                                                            id="sanjiao" class="1"></span></p>
+                                                    <ul class="layui-col-md6 sheng" id="pro_list"></ul>
+                                                    <ul class="layui-col-md12" id="sec_list"></ul>
+                                                    <div class="layui-col-md12" id="city_list"></div>
+                                                </div>
+                                                <div style="float: left; margin-left: 218px;margin-top: -36px;">
+
+                                                </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">系统</label>
+                                            <div class="layui-input-block xitong">
+                                                <input type="radio" name="controllType[4]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[4]" value="1" title="定向">
+                                                <input type="radio" name="controllType[4]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title xt conf-write-4" style="display:none"
+                                                 layui-filter="set_4">
+                                                <select name="controll[4]" xm-select="4">
+                                                    <!--<option value="">请选择系统</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">版本</label>
+                                            <div class="layui-input-block banben">
+                                                <input type="radio" name="controllType[10]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[10]" value="1" title="定向">
+                                                <input type="radio" name="controllType[10]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title bb conf-write-10" style="display:none"
+                                                 lay-filter="set_10">
+                                                <select name="controll[10]" xm-select="10" class="select">
+                                                    <!--<option value="">请选择浏览器</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">浏览器</label>
+                                            <div class="layui-input-block ll">
+                                                <input type="radio" name="controllType[5]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[5]" value="1" title="定向">
+                                                <input type="radio" name="controllType[5]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title ll_select conf-write-5" style="display:none"
+                                                 lay-filter="set_5">
+                                                <select name="controll[5]" xm-select="5" class="select">
+                                                    <!--<option value="">请选择浏览器</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">屏幕大小</label>
+                                            <div class="layui-input-block screen">
+                                                <input type="radio" name="controllType[8]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[8]" value="1" title="定向">
+                                                <input type="radio" name="controllType[8]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title screen_select conf-write-8"
+                                                 style="display:none;" lay-filter="set_8">
+                                                <select name="controll[8]" xm-select="8" class="select">
+                                                    <!--<option value="">请选择屏幕大小</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">手机品牌</label>
+                                            <div class="layui-input-block phone">
+                                                <input type="radio" name="controllType[6]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[6]" value="1" title="定向">
+                                                <input type="radio" name="controllType[6]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title phone_select conf-write-6" style="display:none;"
+                                                 lay-filter="set_6">
+                                                <select name="controll[6]" xm-select="6" class="select">
+                                                    <!--<option value="">请选择手机品牌</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">运营商</label>
+                                            <div class="layui-input-block yy">
+                                                <input type="radio" name="controllType[3]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[3]" value="1" title="定向">
+                                                <input type="radio" name="controllType[3]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title yy_select conf-write-3" style="display:none;"
+                                                 lay-filter="set_3">
+                                                <select name="controll[3]" xm-select="3" class="select">
+                                                    <!--<option value="">请选择运营商</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="width:100px;">来源</label>
+                                            <div class="layui-input-block resource">
+                                                <input type="radio" name="controllType[7]" value="0" title="不限"
+                                                       checked="">
+                                                <input type="radio" name="controllType[7]" value="1" title="定向">
+                                                <input type="radio" name="controllType[7]" value="2" title="屏蔽">
+                                            </div>
+                                            <div class="xm-select-title resource_select conf-write-7"
+                                                 style="display: none;" lay-filter="set_7">
+                                                <select name="controll[7]" xm-select="7" class="select">
+                                                    <!--<option value="">请选择来源</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item layui-layout-admin">
+                                            <div class="layui-input-block">
+                                                <div class="layui-footer" style="left: 0;">
+                                                    <button class="layui-btn" lay-submit=""
+                                                            lay-filter="component-form-demo1">立即提交
+                                                    </button>
+                                                    <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../../url.js"></script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',//主入口模块
+        formSelects: 'formSelects-v4'
+    }).use(['index', 'contlist', 'form', 'table', 'jquery', 'formSelects', 'result'], function () {
+        var table = layui.table;
+        var $ = layui.$,
+            formSelects = layui.formSelects,
+            form = layui.form
+            , admin = layui.admin
+            , result = layui.result
+            , layer = layui.layer;
+
+        var hrefs = window.location.href;
+        var siteid = hrefs.split('=')[1];
+
+        //方法级渲染
+        table.render({
+            elem: '#LAY-app-content-tags-domain'
+            , url: domainurl + '/api/v1/switchjs'
+            , where: {
+                accessToken:layui.data('layuiAdmin').accessToken,
+                siteid: siteid
+            }
+            , cols: [[
+                {field: 'userid', title: '网站主ID'}
+                , {field: 'domain_name', title: '网站域名'}
+                , {field: 'alias', title: '编号',}
+                , {field: 'js_name', title: 'JS功能'}
+                , {title: '操作', width: 280, align: 'center', toolbar: '#layuiadmin-app-cont-tagsbar'}
+            ]]
+            , page: true
+        });
+        var $ = layui.$, active = {
+            reload: function () {
+                var demoReload = $('#test-table-demoReload');
+                //执行重载
+                table.reload('test-table-reload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        key: {
+                            id: demoReload.val()
+                        }
+                    }
+                });
+            },
+            add: function () {
+//                添加
+                layer.open({
+                    type: 2
+                    , title: '添加设置'
+                    , content: 'tagsform.html?siteid=' + siteid
+                    , area: ['800px', '520px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var othis = layero.find('iframe').contents().find("#layuiadmin-app-form-tags")
+                            , js_name = othis.find('input[name="js_name"]').val()
+                            , js_alias_id = othis.find('select[name="js_alias_id"]').val()
+                            , content = othis.find('textarea[name="content"]').val()
+                        ;
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'LAY-user-front-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            admin.req({
+                                type: "POST",//方法类型
+                                dataType: "json",//预期服务器返回的数据类型
+                                url: domainurl + '/api/v1/switchjs/create',//url
+                                data: {
+                                    siteid: siteid,
+                                    js_name: js_name,
+                                    js_alias_id: js_alias_id,
+                                    content: content
+                                },
+                                done: function (res) {
+                                    table.reload('LAY-user-front-submit'); //数据刷新
+                                    table.reload('LAY-app-content-tags-domain');
+                                    layer.msg('添加成功');
+                                    layer.close(index); //关闭弹层
+                                },
+                                error: function (e, code) {
+                                    layer.msg(e.responseJSON.errors.js_alias_id[0], {icon: 5});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                        if (!js_name.replace(/\s/g, '')) return;
+                        if (!js_alias_id.replace(/\s/g, '')) return;
+                        if (!content.replace(/\s/g, '')) return;
+                    }
+                });
+            }
+        };
+
+//获取站长id
+        var domain_id;
+        admin.req({
+            type: 'GET',
+            dataType: "json",
+            url: domainurl + '/api/v1/switchjs',
+            data: {
+                siteid: siteid
+            },
+            done: function (res) {
+                domain_id = res.data[0].userid;
+                $('input[name=userid]').val(domain_id);
+            }
+        })
+
+
+        //获取域名的value
+        var domainval;
+        var adtypeval;
+        var adtplval;
+        var adsizeval;
+        var jsval;
+        var allCityArr=[];
+        var city_arr = [];
+        var isone=0;
+        var isCli=true;
+        var showProList =function(){
+            if (isCli == true) {
+                $("#pro_list").show();
+                event.stopPropagation();
+                isCli = !isCli;
+            } else {
+                $("#pro_list").hide();
+                $("#sec_list").hide();
+                $("#city_list").hide();
+                event.stopPropagation();
+                isCli = !isCli;
+            }
+        }
+        var show_pro=function(){
+            var sdfjlsijf=$("#pro_list")[0].style.display;
+            if(sdfjlsijf=="block"){
+                $("#pro_list").hide();
+            }
+        }
+
+        var init_allstatus=function(){
+            isone=0;
+            $(".city_item").prop("checked",false);
+            allCityArr=[];
+            city_arr = [];
+            $(".shis").html("");
+            isCli = true
+            $("#pro_list").hide();
+            $("#sec_list").hide();
+            $("#city_list").hide();
+        }
+        $('.layui-tab-title li').eq(1).on('click', function () {
+
+            admin.req({
+                type: 'GET',
+                dataType: "json",
+                url: domainurl + '/api/v1/switchjs',
+                data: {
+                    siteid: siteid
+                },
+                done: function (res) {
+                    if (res.data.length == 0) {
+                        layer.msg("无SwitchJS，请添加");
+                        return;
+                    }
+                    if (res.data.length != 0) {
+                        domain_id = res.data[0].userid;
+                    }
+                    $('input[name=userid]').val(domain_id);
+//                用domain_id获取域名和广告类型
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/user/' + domain_id + '/sites',
+                        done: function (res) {
+                            result.setSelect(res, 'domain_name', res.data, 'id', 'domain_name', '请选择域名');
+                        }
+                    })
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",//预期服务器返回的数据类型
+                        url: domainurl + '/api/v1/zone/type',//url
+                        data: {
+                            userid: domain_id
+                        },
+                        done: function (res) {
+                            if (res.code == 0) {
+                                if (res.count == 0) {
+                                    layer.msg('此ID下无操作系统');
+                                } else {
+                                    var czType="";
+                                    var initOs="<option value=\"0\">请选择广告分类</option>"
+                                    for (i = 0; i < res.data.length; i++) {
+                                        czType+="<option value='" + res.data[i]['id'] + "'>" + res.data[i]['name'] + "</option>"
+                                    }
+                                    $("select[name='os']").html(initOs+czType);
+                                    form.render('select', 'set_os');
+                                }
+                            } else {
+                                layer.msg('数据异常');
+                            }
+
+                        }
+                    })
+
+                    form.on('select(domain_name)', function (data) {
+                        domainval = data.value;
+                        if (domain_id !== "") {
+                            admin.req({
+                                type: 'GET',
+                                dataType: "json",//预期服务器返回的数据类型
+                                url: domainurl + '/api/v1/jsid/' + domainval,//url
+                                done: function (res) {
+                                    if (res.data.length == 0) {
+                                        layer.msg('此域名下无JS');
+                                    }
+                                    b(res, 'js', res.data, 'id', '请选择输出JS');
+                                }
+                            })
+                        } else {
+                        }
+                        submitAction();
+                    });
+
+                    form.on('select(os)', function (data) {
+                        adtypeval = data.value;
+                        if (domain_id !== "") {
+                            admin.req({
+                                type: 'GET',
+                                dataType: "json",//预期服务器返回的数据类型
+                                url: domainurl + '/api/v1/zone/tpl',//url
+                                data: {
+                                    userid: domain_id,
+                                    adtypeid: adtypeval
+                                },
+                                done: function (res) {
+                                    if (res.data.length == 0) {
+                                        layer.msg('此操作系统下无广告模式');
+                                    }
+                                    result.setSelect(res, 'tpl', res.data, 'tplid', 'tplname', '请选择广告模式');
+                                }
+                            })
+                        } else {
+                        }
+                        submitAction();
+                    });
+
+                    form.on('select(tpl)', function (data) {
+                        adtplval = data.value;
+                        if (domain_id !== "") {
+                            admin.req({
+                                type: 'GET',
+                                dataType: "json",//预期服务器返回的数据类型
+                                url: domainurl + '/api/v1/zone/stylespecs',//url
+                                data: {
+                                    userid: domain_id,
+                                    tplid: adtplval
+                                },
+                                done: function (res) {
+                                    if (res.data.length == 0) {
+                                        layer.msg('此广告类型下无广告样式');
+                                    }
+                                    a(res, 'size', res.data, 'id', '请选择广告样式');
+                                }
+                            })
+                        } else {
+                        }
+                        submitAction();
+                    });
+
+                    form.on('select(size)', function (data) {
+                        adsizeval = data.value;
+                        submitAction();
+                    });
+
+                    form.on('select(js)', function (data) {
+                        jsval = data.value;
+                        submitAction();
+                    });
+
+                }
+            })
+        })
+
+        Array.intersect = function () {
+            var result = new Array();
+            var obj = {};
+            for (var i = 0; i < arguments.length; i++) {
+                for (var j = 0; j < arguments[i].length; j++) {
+                    var str = arguments[i][j];
+                    if (!obj[str]) {
+                        obj[str] = 1;
+                    }
+                    else {
+                        obj[str]++;
+                        if (obj[str] == arguments.length) {
+                            result.push(str);
+                        }
+                    }//end else
+                }//end for j
+            }//end for i
+            return result;
+        }
+
+        var selectEmptHtml = '<dd lay-value="" class="xm-select-tips" style="background-color: #FFF!important;"><div class="xm-cz-group" show="null" style="max-width: 246px;"><div class="xm-cz" method="全选" title="全选" style="margin-right: 30px"><i class="iconfont icon-quanxuan"></i><span>全选</span></div><div class="xm-cz" method="清空" title="清空" style="margin-right: 30px"><i class="iconfont icon-qingkong"></i><span>清空</span></div><div class="xm-cz" method="反选" title="反选" style="margin-right: 30px"><i class="iconfont icon-fanxuan"></i><span>反选</span></div></div><div class="xm-cz" method="" title=""><i class="iconfont icon-caidan"></i><span></span></div></dd><dt style="display:none;"> </dt>';
+
+        function getDiction(ect_id, selectArr, item) {
+            admin.req({
+                type: 'GET',
+                dataType: "json",
+                url: domainurl + '/api/v1/enum/controlList/' + ect_id,
+                done: function (res) {
+                    var resdata = res.data;
+                    var ids = [];
+                    var tmpHTML = '';
+                    for (var i = 0; i < resdata.length; i++) {
+                        ids.push(resdata[i].id);
+                        tmpHTML += "<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>";
+
+                    }
+                    $("dl[xid='" + ect_id + "']").html(selectEmptHtml + tmpHTML)
+                    layui.formSelects.value(ect_id + '', selectArr);
+                    form.render('select', 'set_' + ect_id);
+                    form.render('select', 'setp_' + ect_id);
+//                    }
+                    if (item.operate_type != "0") {
+                        $('.conf-write-' + ect_id).css({display: 'block'});
+                    } else {
+                        $('.conf-write-' + ect_id).css({display: 'none'});
+                    }
+
+                }
+            })
+        }
+
+        function isInArray(arr, value) {
+            for (var i = 0; i < arr.length; i++) {
+                if (value == arr[i]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function getDictionForArea(ect_id, selectArr) {
+            $('.area_checkbox').css({
+                display: "block"
+            });
+            var delArr = [], pro_id = 4382;
+            city_arr = allCityArr = selectArr;
+            admin.req({
+                type: 'GET',
+                dataType: "json",
+                url: domainurl + '/api/v1/enum/controlList/' + ect_id,
+                done: function (res) {
+                    var city_html = "<label class='layui-form-label' style='width:100px;'>所选城市</label>";
+                    var proStr = "";
+                    for (var i = 0; i < res.data.length; i++) {
+                        proStr += "<li id='" + res.data[i].id + "'class='pro_item'>" + res.data[i].enum_name + "</li>"
+                        for (var j = 0; j < res.data[i].child.length; j++) {
+                            if (isInArray(allCityArr, res.data[i].child[j].id)) {
+                                city_html +=
+                                    "<input type='checkbox' checked='checked' class='city' name='controll[1][]' title='" + res.data[i].child[j].enum_name + "' lay-skin='primary' lay-filter='city' value='" + res.data[i].child[j].id + "'>";
+                            }
+                        }
+                    }
+                    $('.shis').html(city_html);
+                    $("#pro_list").html(proStr)
+                    form.render('checkbox');
+                    var city_Line = [[], [], [], [], []];
+                    var sec_fun = function (idx) {
+                        var secStr="";
+                        if(city_Line[0].length>0){
+                            secStr = "<input type='checkbox' id='" + idx + "' class='all_city' lay-filter='all_city' title='全选' lay-skin='primary'/><input type='checkbox' class='all_res' lay-filter='all_res' title='反选' lay-skin='primary'/></br><input type='checkbox' id='" + city_Line[0][0].id + "' class='city_item' name='' title='" + city_Line[0][0].enum_name + "'lay-skin='primary' lay-filter='city_item'>"
+                        }else{
+                            secStr = "<input type='checkbox' id='" + idx + "' class='all_city' lay-filter='all_city' title='全选' lay-skin='primary'/><input type='checkbox' class='all_res' lay-filter='all_res' title='反选' lay-skin='primary'/></br>"
+                        }
+                        if (city_Line[1].length > 0) {
+                            secStr += "<li class='sec_item' id='1'>一线城市</li>"
+                        }
+                        if (city_Line[2].length > 0) {
+                            secStr += "<li class='sec_item' id='2'>二线城市</li>"
+                        }
+                        if (city_Line[3].length > 0) {
+                            secStr += "<li class='sec_item' id='3'>三线城市</li>"
+                        }
+                        if (city_Line[4].length > 0) {
+                            secStr += "<li class='sec_item' id='4'>其它城市</li>"
+                        }
+                        $("#sec_list").html(secStr);
+                        $("#sec_list").show();
+                        form.render("checkbox");
+                        initRenderCity();
+
+                    }
+                    var initRenderCity = function () {      //默认选中
+                        var citys_list = document.getElementsByClassName('city_item');
+                        for (var i = 0; i < allCityArr.length; i++) {
+                            for (var j = 0; j < citys_list.length; j++) {
+                                if (allCityArr[i] == citys_list[j].id) {
+                                    var jqObj = citys_list[j]
+                                    $(jqObj).prop('checked', true)
+                                    form.render('checkbox');
+                                }
+                            }
+                        }
+                    }
+                    //省级列表点击
+                    $("#pro_list li").on('click', function () {
+                        var len= $("#pro_list li").length;
+                        $("#city_list").hide();
+                        $('.city_item').remove();
+                        city_Line = [[], [], [], [], []]
+                        var idx = $(this).index();
+                        var datas = res.data[idx];
+                        if (datas.child.length == 1) { //直辖市
+                            $("#sec_list").html("<input type='checkbox' id='" + datas.child[0].id + "' class='city_item' name='' title='" + datas.child[0].enum_name + "'lay-skin='primary' lay-filter='city_item'/>");
+                            $("#sec_list").css({'width':'90px'});
+                            $("#city_list").css({'left':'310px'});
+                            $("#sec_list").show()
+                            form.render("checkbox");
+                            initRenderCity();
+                        }else if(idx==len-1){
+                            var otherStr=""
+                            for(var i=0;i< datas.child.length;i++){
+                                otherStr+="<input type='checkbox' id='" +datas.child[i].id + "' class='city_item' name='' title='" + datas.child[i].enum_name + "'lay-skin='primary' lay-filter='city_item'><br/>"
+                            }
+                            $("#sec_list").css({'width':'90px'});
+                            $("#city_list").css({'left':'310px'});
+                            $("#sec_list").html(otherStr);
+                            $("#sec_list").show()
+                            form.render("checkbox");
+                            initRenderCity();
+                        } else {
+                            for (var i = 0; i < datas.child.length; i++) {
+                                if (datas.child[i].level == 0) {
+                                    city_Line[0].push(datas.child[i])
+                                } else if (datas.child[i].level == 1) {
+                                    city_Line[1].push(datas.child[i])
+                                } else if (datas.child[i].level == 2) {
+                                    city_Line[2].push(datas.child[i])
+                                } else if (datas.child[i].level == 3) {
+                                    city_Line[3].push(datas.child[i])
+                                } else {
+                                    city_Line[4].push(datas.child[i])
+                                }
+                            };
+                            $("#sec_list").css({'width':'160px'});
+                            $("#city_list").css({'left':'380px'});
+                            sec_fun(idx);
+                        }
+
+                    })
+                    //市级列表点击筛选
+                    $("#sec_list").on('click', '.sec_item', function () {
+                        var idx = this.id;
+                        var cityStr = "";
+                        if (city_Line[idx].length > 0) {
+                            for (var i = 0; i < city_Line[idx].length; i++) {
+                                cityStr += "<input type='checkbox' id='" + city_Line[idx][i].id + "' class='city_item' name='' title='" + city_Line[idx][i].enum_name + "'lay-skin='primary' lay-filter='city_item'>"
+                            }
+                            $("#city_list").html(cityStr);
+                            $("#city_list").show();
+                            form.render('checkbox');
+                            initRenderCity();
+                        }
+                    })
+                    // 省级列表点击事件 toggle失常
+//                    $('#sel_pro').on('click', function (event) {
+////                        showProList();
+//                    })
+
+                    //渲染所在省的citylist
+                    function show_City(idx, dataArr, isTrue) {
+                        var datas = dataArr[idx].child;
+                        var cityStr = "";
+                        if (isTrue == 1) {
+                            for (var i = 0; i < datas.length; i++) {
+                                if(datas[i].level!=0){
+                                    cityStr += "<input type='checkbox' id='" + datas[i].id + "' class='city_item' name='' title='" + datas[i].enum_name + "'lay-skin='primary'lay-filter='city_item'>"
+                                }
+                            }
+                            $("#city_list").html(cityStr)
+                            $('.city_item').prop("checked", true);
+                            form.render('checkbox');
+                        } else {
+                            for (var i = 0; i < datas.length; i++) {
+                                if(datas[i].level!=0){
+                                    cityStr += "<input type='checkbox' id='" + datas[i].id + "' class='city_item' name='' title='" + datas[i].enum_name + "'lay-skin='primary'lay-filter='city_item'>"
+                                }
+                            }
+                            $("#city_list").html(cityStr)
+                            $('.city_item').prop("checked", false);
+                            form.render('checkbox');
+                        }
+                        $("#city_list").show()
+                        form.render("checkbox");
+                    }
+
+                    //所在省的市级列表的全选
+                    var allCityFun = function (citylist, isCheck, proid) {
+                        if (isCheck) {
+                            for (var i = 0; i < citylist.length; i++) {
+                                city_arr.push(citylist[i].id)
+                            }
+                            if (delArr.length > 0) {
+                                for (var i = 0; i < citylist.length; i++) {
+                                    for (var j = 0; j < delArr.length; j++) {
+                                        if (citylist[i].id == delArr[j]) {
+                                            delArr.splice(j, 1)
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            for (var i = 0; i < citylist.length; i++) {
+                                delArr.push(citylist[i].id)
+                            }
+                        }
+                        render_city(proid)
+                    }
+                    form.on('checkbox(all_city)', function (data) {
+                        $('.all_res').prop("checked",false);
+                        var idx = $(".all_city").attr("id");
+                        var a = data.elem.checked;
+                        var citylist = res.data[idx].child
+                        if (a == true) {
+                            show_City(idx, res.data, 1)
+                            allCityFun(citylist, true, idx);
+                            form.render('checkbox');
+                        } else {
+                            show_City(idx, res.data, 0)
+                            allCityFun(citylist, false, idx);
+                            form.render('checkbox');
+
+                        }
+                    })
+                    form.on('checkbox(city)', function (data) {
+                        var isRes = data.elem.checked;
+                        if (!isRes) {
+                            for (var i = 0; i < allCityArr.length; i++) {
+                                if (allCityArr[i] == data.elem.value) {
+                                    allCityArr.splice(i, 1)
+                                }
+                            }
+                        }
+                        else {
+                            allCityArr.push(data.elem.value)
+                        }
+                    })
+                    //所在省的市级列表的反选
+                    var res_trans = function (proid) {
+                        var trans = []
+                        trans = delArr
+                        delArr = city_arr
+                        city_arr = trans
+                        render_city(proid);
+                    }
+                    form.on('checkbox(all_res)', function (data) {
+                        $('.all_city').prop('checked', false)
+                        var idx = $(".all_city").attr("id");
+                        var isRes = data.elem.checked;
+                        var proid = $('.all_city')[0].id;
+                        var datas = document.getElementsByClassName('city_item');
+                        if (datas.length > 0) {
+                            delArr = [];
+                            city_arr = [];
+                            if (isRes) {
+                                for (var i = 0; i < datas.length; i++) {
+                                    var jqObj = document.getElementsByClassName('city_item')[i]
+                                    if ($(jqObj).prop('checked') == true) {
+                                        city_arr.push(jqObj.id)
+                                        $(jqObj).prop('checked', false)
+                                    } else {
+
+                                        delArr.push(jqObj.id)
+                                        $(jqObj).prop('checked', true)
+
+                                    }
+                                }
+                                form.render('checkbox');
+                            } else {
+                                for (var i = 0; i < datas.length; i++) {
+                                    var jqObj = document.getElementsByClassName('city_item')[i]
+                                    if ($(jqObj).prop('checked') == false) {
+                                        delArr.push(jqObj.id)
+                                        $(jqObj).prop('checked', true)
+                                    } else {
+                                        city_arr.push(jqObj.id)
+                                        $(jqObj).prop('checked', false)
+                                    }
+                                }
+                            }
+                            res_trans(proid);
+                            form.render('checkbox');
+                        }
+                    })
+
+                    Array.prototype.distinct = function () {
+                        var arr = this,
+                            len = arr.length;
+                        arr.sort(function (a, b) {  //对数组进行排序才能方便比较
+                            return a - b;
+                        })
+
+                        function loop(index) {
+                            if (index >= 1) {
+                                if (arr[index] === arr[index - 1]) {
+                                    arr.splice(index, 1);
+                                }
+                                loop(index - 1); //递归loop函数进行去重
+                            }
+                        }
+
+                        loop(len - 1);
+                        return arr;
+                    };
+                    function unique8(arr) {
+                        var i,
+                            j,
+                            len = arr.length;
+                        for (i = 0; i < len; i++) {
+                            for (j = i + 1; j < len; j++) {
+                                if (arr[i] == arr[j]) {
+                                    arr.splice(j, 1);
+                                    len--;
+                                    j--;
+                                }
+                            }
+                        }
+                        return arr;
+                    }
+                    var render_city = function (proid) {
+                        delArr = unique8(delArr);
+                        city_arr = unique8(city_arr);
+                        var strArr = [];
+                        var proid = $('#sec_list .all_city').attr('id');
+                        var data_list = [];
+                        var city_html = "<label class='layui-form-label' style='width:100px;'>所选城市</label>";
+                        allCityArr = allCityArr.concat(city_arr);
+                        allCityArr = unique8(allCityArr);
+                        if (delArr.length > 0) {
+                            for (var j = 0; j < delArr.length; j++) {
+                                for (var k = 0; k < allCityArr.length; k++) {
+                                    if (delArr[j] == allCityArr[k]) {
+                                        allCityArr.splice(k, 1)
+                                    }
+                                }
+                            }
+                        }
+                        for (var j = 0; j < res.data.length; j++) {
+                            for (var k = 0; k < res.data[j].child.length; k++) {
+                                data_list.push(res.data[j].child[k])
+                            }
+                        }
+                        for (var i = 0; i < data_list.length; i++) {
+                            for (var k = 0; k < allCityArr.length; k++) {
+                                if (data_list[i].id == allCityArr[k]) {
+                                    city_html += "<input type='checkbox' checked='checked' class='city' name='controll[1][]' title='" + data_list[i].enum_name + "' lay-skin='primary' lay-filter='city' value='" + data_list[i].id + "'>"
+                                }
+                            }
+                        }
+                        $('.shis').html(city_html);
+                        form.render('checkbox');
+                    }
+
+
+
+                    form.on('checkbox(city_item)', function (data) {
+                        var isRes = data.elem.checked;
+                        if ($("#sec_list").children().length > 2 && $("#sec_list .city_item").length <= 2) {
+                            var proid = document.getElementsByClassName('all_city')[0].id;
+                        }
+                        var cityList = document.getElementsByClassName('city_item')
+                        if (city_arr.length == 0) {
+                            for (var i = 0; i < cityList.length; i++) {
+
+                                var jqObj = cityList[i];
+                                if ($(jqObj).prop('checked') == true) {
+                                    city_arr.push(cityList[i].id)
+                                }
+                            }
+                        }
+                        if (isRes) {
+                            for (var i = 0; i < cityList.length; i++) {
+                                var jqObj = cityList[i];
+                                if ($(jqObj).prop('checked') == true) {
+                                    city_arr.push(jqObj.id)
+                                    for (var k = 0; k < delArr.length; k++) {
+                                        if (jqObj.id == delArr[k]) {
+                                            delArr.splice(k, 1);
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            $('.all_city').prop('checked', false);
+                            for (var i = 0; i < cityList.length; i++) {
+                                var jqObj = cityList[i];
+                                for (var k = 0; k < city_arr.length; k++) {
+
+                                    if ($(jqObj).prop('checked') == false) {
+                                        delArr.push(jqObj.id)
+                                    }
+                                    if ($(jqObj).prop('checked') == false && jqObj.id == city_arr[k]) {
+                                        city_arr.splice(k, 1);
+                                    }
+                                }
+                            }
+                        }
+                        render_city(proid)
+                    })
+                    //省级列表点击事件
+                    $("#sec_list li").on('click', function () {
+                        var idx = this.id;
+                        var datas = res.data[idx].child;
+                        var cityStr = "<input type='checkbox' id='owner_one' lay-filter='owner_one' title='全选' lay-skin='primary'>";
+                        for (var i = 0; i < datas.length; i++) {
+                            cityStr += "<input type='checkbox' class='one' name='' title='" + datas[i].enum_name + "'lay-skin='primary'>"
+                        }
+                        $("#city_list").html(cityStr)
+                        $("#city_list").show()
+                        form.render("checkbox");
+                    })
+                    form.render("checkbox");
+                    var proArr = []; //参数数组
+                    //所选城市列表渲染
+                    var showCity = function (proArr, isCheck) {
+                        var cityHtml = "<label class='layui-form-label' style='width:100px;'>所选城市</label>";
+                        for (var k = 0; k < proArr.length; k++) {
+                            for (var j = 0; j < proArr[k].child.length; j++) {
+                                var cityData = proArr[k].child[j];
+                                cityHtml += "<input type='checkbox' class='city' name='controll[1][]' title='" + cityData.enum_name + "' lay-skin='primary' lay-filter='city' value='" + cityData.id + "'><div class='layui-unselect layui-form-checkbox' lay-skin='primary'><span>" + cityData.enum_name + "</span><i class='layui-icon layui-icon-ok'></i></div>"
+                            }
+                        }
+                        $('.shis').html(cityHtml);
+                        form.render('checkbox');
+                        if (isCheck == 1) {
+                            $('.city').prop("checked", true)
+                        } else if (isCheck == 2) {
+                            $('.city').prop("checked", false)
+                        } else if (isCheck == 3) {
+                            var citys = document.getElementsByClassName('city')
+                            for (var i = 0; i < citys.length; i++) {
+                                var curCity = citys[i];
+                                if ($(curCity).prop('checked') == true) {
+                                    $(curCity).prop('checked', false)
+                                } else {
+                                    $(curCity).prop('checked', false)
+                                }
+                                form.render('checkbox');
+                            }
+                        } else if (isCheck == 4) {
+                            var citys = document.getElementsByClassName('city')
+                            for (var i = 0; i < citys.length; i++) {
+                                var curCity = citys[i];
+                                if ($(curCity).prop('checked') == true) {
+                                    $(curCity).prop('checked', false)
+                                } else {
+                                    $(curCity).prop('checked', false)
+                                }
+                                form.render('checkbox');
+                            }
+                        }
+                        form.render('checkbox');
+                    }
+                    // 省级列表全选。
+                    form.on('checkbox(pro_all)', function (data) {
+                        var a = data.elem.checked;
+                        if (a == true) {
+                            proArr = res.data;
+                            showCity(proArr, 1);
+                            form.render('checkbox');
+                        } else {
+                            proArr = [];
+                            showCity(proArr, 2);
+                            form.render('checkbox');
+                        }
+                    });
+                    //省级列表反选。
+                    form.on('checkbox(pro_res)', function (data) {
+                        var a = data.elem.checked;
+                        if (a == true) {
+                            showCity(proArr, 3);
+                            form.render('checkbox');
+                        } else {
+                            showCity(proArr, 4);
+                            form.render('checkbox');
+                        }
+                    });
+                }
+            })
+        }
+
+//       将输入的数据进行提交查询获取以下数据
+//        $('.btn_span').on('click', function () {
+        var submitAction = function () {
+            if (domain_id == undefined || domainval == undefined || adtypeval == undefined || adtplval == undefined || adsizeval == undefined || jsval == undefined) {
+                return;
+            } else {
+                var loadingIndex = layer.load(1, {
+                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                });
+                admin.req({
+                    type: 'POST',
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: domainurl + '/api/v1/sitejsconf/getJsConfig',//url
+                    data: {
+                        site_user_id: domain_id,
+                        site_id: domainval,
+                        adsystype_id: adtypeval,
+                        adtype_id: adtplval,
+                        ad_size_id: adsizeval,
+                        js_id: jsval
+                    },
+                    done: function (res) {
+                        var resdata = res.data.list;
+
+                        $('.xm-select-label span ').remove();
+                        $('.xm-select-dl .xm-select-this ').attr('class', '')
+                        var nameArr = ['1', '2', '3', '4', '5', '6', '7', '8', '10'];
+                        for (var i = 0; i < nameArr.length; i++) {
+                            layui.formSelects.value(nameArr[i], []);
+                            formSelects.render();
+                            $('input:radio[name="controllType[' + nameArr[i] + ']"]')[0].checked = true;
+                                $('.conf-write-' + nameArr[i] ).css({display: "none"});
+                        }
+
+
+                        resdata.forEach(function (d) {
+                            var selectArr = new Array();
+                            if (d.jsconfig_value == null) {
+                                d.jsconfig_value = [];
+                            }
+                            for (var i = 0; i < d.jsconfig_value.length; i++) {
+                                selectArr.push(d.jsconfig_value[i].id);
+                            }
+                            $("input[name=\'controllType[" + d.ect_id + "]\']").each(function (i, item) {
+                                if ($(item).val() == d.operate_type) {
+                                    $(item).prop("checked", true);
+                                    layui.use('form', function () {
+                                        var form = layui.form;
+                                        form.render();
+                                        iniAddListener();
+                                    });
+                                }
+                                else {
+                                    $(item).prop("checked", false);
+                                    $("dl[xid='" + d.ect_id + "']").html(selectEmptHtml)
+                                    layui.use('form', function () {
+                                        var form = layui.form;
+                                        form.render();
+                                        iniAddListener();
+                                    });
+                                }
+                            });
+                            if (d.ect_id == 1) {
+                                getDictionForArea(d.ect_id, selectArr);
+                            }
+                            else {
+                                getDiction(d.ect_id, selectArr, d);
+                            }
+
+                        })
+                        //   模拟器屏蔽开关
+                        $('[name=isOpen]').each(function (i, item) {
+                            if ($(item).val() == res.data.isOpen) {
+                                $(item).prop('checked', true);
+                                layui.use('form', function () {
+                                    var form = layui.form;
+                                    form.render();
+                                    iniAddListener();
+                                });
+                            }
+                        });
+                        //版本系统分类
+                        layer.close(loadingIndex);
+                    }
+                })
+            }
+        }
+
+        function a(res, id, data, value, msg) {
+            $("select[name='" + id + "']").html("<option value='0'>" + msg + "</option>");
+            if (res.code == 0) {
+                if (res.count == 0) {
+                    layer.msg('没有数据');
+                } else {
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i] != null && data[i]['width'] != null && data[i]['height'] != null) {
+                            $("select[name='" + id + "']").append("<option value='" + data[i][value] + "'>" + data[i]['stylename'] + '[' + data[i]['width'] + '*' + data[i]['height'] + "]</option>");
+                        }
+                    }
+                    form.render('select', 'set_' + id);
+                }
+            } else {
+                layer.msg('数据异常');
+            }
+        }
+
+        function b(res, id, data, value, msg) {
+            $("select[name='" + id + "']").html("<option value='0'>" + msg + "</option>");
+            if (res.code == 0) {
+                if (res.count == 0) {
+                    layer.msg('没有数据');
+                } else {
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i] != null && data[i]['js_alias_id'] != null && data[i]['js_name'] != null) {
+                            $("select[name='" + id + "']").append("<option value='" + data[i][value] + "'>[" + data[i]['js_alias_id'] + ']' + data[i]['js_name'] + "</option>");
+                        }
+                    }
+                    form.render('select', 'set_' + id);
+                }
+
+            } else {
+                layer.msg('数据异常');
+            }
+        }
+
+
+        var flagArea = new Array();
+        flagArea[1] = false;
+        flagArea[2] = false;
+        flagArea[3] = false;
+        flagArea[4] = false;
+        flagArea[5] = false;
+        flagArea[6] = false;
+        flagArea[7] = false;
+        flagArea[8] = false;
+        flagArea[9] = false;
+
+
+        //        一线全选和全不选
+        form.on('checkbox(owner_one)', function (data) {
+            var a = data.elem.checked;
+            if (a == true) {
+                $(".one").prop("checked", true);
+                form.render('checkbox');
+            } else {
+                $(".one").prop("checked", false);
+                form.render('checkbox');
+            }
+        })
+        //        一线全选和全不选
+        form.on('checkbox(owner_two)', function (data) {
+            var a = data.elem.checked;
+            if (a == true) {
+                $(".two").prop("checked", true);
+                form.render('checkbox');
+            } else {
+                $(".two").prop("checked", false);
+                form.render('checkbox');
+            }
+        })
+        //        一线全选和全不选
+        form.on('checkbox(owner_else)', function (data) {
+            var a = data.elem.checked;
+            if (a == true) {
+                $(".else").prop("checked", true);
+                form.render('checkbox');
+            } else {
+                $(".else").prop("checked", false);
+                form.render('checkbox');
+            }
+        })
+
+        var iniAddListener = function () {
+
+
+            var empty_param = '';
+            //时间
+            $('.time .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 0) {
+                    $('.time_select').css({display: "none"});
+//                    $('.time_select .xm-select-label span ').remove();
+//                    $('.time_select .xm-select-dl .xm-select-this ').attr('class', '')
+                    layui.formSelects.value('2', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.time_select').css({display: "block"});
+                    layui.formSelects.value('2', []);
+//                    $('.time_select .xm-select-label span ').remove();
+//                    $('.time_select .xm-select-dl .xm-select-this ').attr('class', '')
+                    $('.xm-select-empty').hide()
+                    if (flagArea[1]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/2',
+                        done: function (res) {
+                            var resdata = res.data;
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='2']").html(dlHtml+dldlhtml);
+                        }
+                    })
+                    flagArea[1] = !flagArea[1];
+                }
+            })
+
+            //地域
+
+            $('.area .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 1) {
+                    $('.area_checkbox').css({
+                        display: "block"
+                    });
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/1',
+                        done: function (res) {
+                            var proStr = "";
+                            for (var i = 0; i < res.data.length; i++) {
+                                proStr += "<li id='" + res.data[i].id + "'class='pro_item'>" + res.data[i].enum_name + "</li>"
+                            }
+                            $("#pro_list").html(proStr)
+                            form.render('checkbox');
+                            var city_Line = [[], [], [], [], []];
+                            var sec_fun = function (idx) {
+                                var secStr="";
+                                if(city_Line[0].length>0){
+                                    secStr = "<input type='checkbox' id='" + idx + "' class='all_city' lay-filter='all_city' title='全选' lay-skin='primary'/><input type='checkbox' class='all_res' lay-filter='all_res' title='反选' lay-skin='primary'/></br><input type='checkbox' id='" + city_Line[0][0].id + "' class='city_item' name='' title='" + city_Line[0][0].enum_name + "'lay-skin='primary' lay-filter='city_item'>"
+                                }else{
+                                    secStr = "<input type='checkbox' id='" + idx + "' class='all_city' lay-filter='all_city' title='全选' lay-skin='primary'/><input type='checkbox' class='all_res' lay-filter='all_res' title='反选' lay-skin='primary'/></br>"
+                                }
+                                if (city_Line[1].length > 0) {
+                                    secStr += "<li class='sec_item' id='1'>一线城市</li>"
+                                }
+                                if (city_Line[2].length > 0) {
+                                    secStr += "<li class='sec_item' id='2'>二线城市</li>"
+                                }
+                                if (city_Line[3].length > 0) {
+                                    secStr += "<li class='sec_item' id='3'>三线城市</li>"
+                                }
+                                if (city_Line[4].length > 0) {
+                                    secStr += "<li class='sec_item' id='4'>其它城市</li>"
+                                }
+                                $("#sec_list").html(secStr);
+                                $("#sec_list").show();
+                                form.render("checkbox");
+                                initRenderCity();
+                            }
+                            var initRenderCity = function () {      //默认选中
+                                var citys_list = document.getElementsByClassName('city_item');
+                                for (var i = 0; i < allCityArr.length; i++) {
+                                    for (var j = 0; j < citys_list.length; j++) {
+                                        if (allCityArr[i] == citys_list[j].id) {
+                                            var jqObj = citys_list[j]
+                                            $(jqObj).prop('checked', true)
+                                            form.render('checkbox');
+                                        }
+                                    }
+                                }
+                            }
+
+                            //省级列表点击
+                            $("#pro_list li").on('click', function () {
+                                var len=$("#pro_list li").length;
+                                $("#city_list").hide();
+                                $('.city_item').remove();
+                                city_Line = [[], [], [], [], []];
+                                var idx = $(this).index();
+                                var datas = res.data[idx];
+                                if (datas.child.length == 1) { //直辖市
+                                    $("#sec_list").html("<input type='checkbox' id='" + datas.child[0].id + "' class='city_item' name='' title='" + datas.child[0].enum_name + "'lay-skin='primary' lay-filter='city_item'/>");
+                                    $("#sec_list").css({'width':'90px'});
+                                    $("#city_list").css({'left':'310px'});
+                                    $("#sec_list").show()
+                                    form.render("checkbox");
+                                    initRenderCity();
+                                }else if(idx==len-1){
+                                    var otherStr=""
+                                    for(var i=0;i< datas.child.length;i++){
+                                        otherStr+="<input type='checkbox' id='" +datas.child[i].id + "' class='city_item' name='' title='" + datas.child[i].enum_name + "'lay-skin='primary' lay-filter='city_item'>"
+                                    }
+                                    $("#sec_list").css({'width':'90px'});
+                                    $("#city_list").css({'left':'310px'});
+                                    $("#sec_list").html(otherStr);
+                                    $("#sec_list").show()
+                                    form.render("checkbox");
+                                    initRenderCity();
+
+                                } else {
+                                    for (var i = 0; i < datas.child.length; i++) {
+                                        if (datas.child[i].level == 0) {
+                                            city_Line[0].push(datas.child[i])
+                                        } else if (datas.child[i].level == 1) {
+                                            city_Line[1].push(datas.child[i])
+                                        } else if (datas.child[i].level == 2) {
+                                            city_Line[2].push(datas.child[i])
+                                        } else if (datas.child[i].level == 3) {
+                                            city_Line[3].push(datas.child[i])
+                                        } else {
+                                            city_Line[4].push(datas.child[i])
+                                        }
+                                    };
+                                    $("#sec_list").css({'width':'160px'});
+                                    $("#city_list").css({'left':'380px'});
+                                    sec_fun(idx);
+                                }
+
+                            })
+                            //市级列表点击筛选
+                            $("#sec_list").on('click', '.sec_item', function () {
+                                var idx = this.id;
+                                var cityStr = "";
+                                if (city_Line[idx].length > 0) {
+                                    for (var i = 0; i < city_Line[idx].length; i++) {
+                                        cityStr += "<input type='checkbox' id='" + city_Line[idx][i].id + "' class='city_item' name='' title='" + city_Line[idx][i].enum_name + "'lay-skin='primary' lay-filter='city_item'>"
+                                    }
+                                    $("#city_list").html(cityStr);
+                                    $("#city_list").show();
+                                    form.render('checkbox');
+                                    initRenderCity();
+                                }
+                            })
+                            // 省级列表点击事件 toggle失常
+                            $('#sel_pro').off("click")
+                            $('#sel_pro').on('click', function (event) {
+                                if($("#pro_list")[0].style.display=="block"){
+                                    $("#pro_list")[0].style.display="none"
+                                    $("#sec_list")[0].style.display="none"
+                                    $("#city_list")[0].style.display="none"
+                                }else if($("#pro_list")[0].style.display=="none"){
+                                    $("#pro_list")[0].style.display="block"
+                                }
+
+                            })
+                            //渲染所在省的citylist
+                            function show_City(idx, dataArr, isTrue) {
+                                var datas = dataArr[idx].child;
+                                var cityStr = "";
+                                if (isTrue == 1) {
+                                    for (var i = 0; i < datas.length; i++) {
+                                        if(datas[i].level!=0){
+                                            cityStr += "<input type='checkbox' id='" + datas[i].id + "' class='city_item' name='' title='" + datas[i].enum_name + "'lay-skin='primary'lay-filter='city_item'>"
+                                        }
+                                    }
+                                    $("#city_list").html(cityStr)
+                                    $('.city_item').prop("checked", true);
+                                    form.render('checkbox');
+                                } else {
+                                    for (var i = 0; i < datas.length; i++) {
+                                        if(datas[i].level!=0){
+                                            cityStr += "<input type='checkbox' id='" + datas[i].id + "' class='city_item' name='' title='" + datas[i].enum_name + "'lay-skin='primary'lay-filter='city_item'>"
+                                        }
+                                    }
+                                    $("#city_list").html(cityStr)
+                                    $('.city_item').prop("checked", false);
+                                    form.render('checkbox');
+                                }
+                                $("#city_list").show()
+                                form.render("checkbox");
+                            }
+
+                            //所在省的市级列表的全选
+                            var allCityFun = function (citylist, isCheck, proid) {
+                                if (isCheck) {
+                                    for (var i = 0; i < citylist.length; i++) {
+                                        city_arr.push(citylist[i].id)
+                                    }
+                                    if (delArr.length > 0) {
+                                        for (var i = 0; i < citylist.length; i++) {
+                                            for (var j = 0; j < delArr.length; j++) {
+                                                if (citylist[i].id == delArr[j]) {
+                                                    delArr.splice(j, 1)
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    for (var i = 0; i < citylist.length; i++) {
+                                        delArr.push(citylist[i].id)
+                                    }
+                                }
+                                render_city(proid)
+                            }
+                            form.on('checkbox(all_city)', function (data) {
+                                $('.all_res').prop("checked",false);
+                                var idx = $(".all_city").attr("id");
+                                var a = data.elem.checked;
+                                var citylist = res.data[idx].child
+                                if (a == true) {
+                                    show_City(idx, res.data, 1)
+                                    allCityFun(citylist, true, idx);
+                                    form.render('checkbox');
+                                } else {
+                                    show_City(idx, res.data, 0)
+                                    allCityFun(citylist, false, idx);
+                                    form.render('checkbox');
+
+                                }
+                            })
+                            form.on('checkbox(city)', function (data) {
+                                var isRes = data.elem.checked;
+                                if (!isRes) {
+                                    for (var i = 0; i < allCityArr.length; i++) {
+                                        if (allCityArr[i] == data.elem.value) {
+                                            allCityArr.splice(i, 1)
+                                        }
+                                    }
+                                }
+                                else {
+                                    allCityArr.push(data.elem.value)
+                                }
+                            })
+                            //所在省的市级列表的反选
+                            var res_trans = function (proid) {
+                                var trans = []
+                                trans = delArr
+                                delArr = city_arr
+                                city_arr = trans
+                                render_city(proid);
+                            }
+                            form.on('checkbox(all_res)', function (data) {
+                                $('.all_city').prop('checked', false)
+                                var idx = $(".all_city").attr("id");
+                                var isRes = data.elem.checked;
+                                var proid = $('.all_city')[0].id;
+                                var datas = document.getElementsByClassName('city_item');
+                                if (datas.length > 0) {
+                                    delArr = [];
+                                    city_arr = [];
+                                    if (isRes) {
+                                        for (var i = 0; i < datas.length; i++) {
+                                            var jqObj = document.getElementsByClassName('city_item')[i]
+                                            if ($(jqObj).prop('checked') == true) {
+                                                city_arr.push(jqObj.id)
+                                                $(jqObj).prop('checked', false)
+                                            } else {
+
+                                                delArr.push(jqObj.id)
+                                                $(jqObj).prop('checked', true)
+
+                                            }
+                                        }
+                                        form.render('checkbox');
+                                    } else {
+                                        for (var i = 0; i < datas.length; i++) {
+                                            var jqObj = document.getElementsByClassName('city_item')[i]
+                                            if ($(jqObj).prop('checked') == false) {
+                                                delArr.push(jqObj.id)
+                                                $(jqObj).prop('checked', true)
+                                            } else {
+                                                city_arr.push(jqObj.id)
+                                                $(jqObj).prop('checked', false)
+                                            }
+                                        }
+                                    }
+                                    res_trans(proid);
+                                    form.render('checkbox');
+                                }
+                            })
+                            var delArr = [], pro_id = 4382;
+                            Array.prototype.distinct = function () {
+                                var arr = this,
+                                    len = arr.length;
+                                arr.sort(function (a, b) {  //对数组进行排序才能方便比较
+                                    return a - b;
+                                })
+
+                                function loop(index) {
+                                    if (index >= 1) {
+                                        if (arr[index] === arr[index - 1]) {
+                                            arr.splice(index, 1);
+                                        }
+                                        loop(index - 1); //递归loop函数进行去重
+                                    }
+                                }
+
+                                loop(len - 1);
+                                return arr;
+                            };
+
+                            function unique8(arr) {
+                                var i,
+                                    j,
+                                    len = arr.length;
+                                for (i = 0; i < len; i++) {
+                                    for (j = i + 1; j < len; j++) {
+                                        if (arr[i] == arr[j]) {
+                                            arr.splice(j, 1);
+                                            len--;
+                                            j--;
+                                        }
+                                    }
+                                }
+                                return arr;
+                            }
+
+                            var render_city = function (proid) {
+                                delArr = unique8(delArr);
+                                city_arr = unique8(city_arr);
+                                var strArr = [];
+                                var proid = $('#sec_list .all_city').attr('id');
+                                var data_list = [];
+                                var city_html = "<label class='layui-form-label' style='width:100px;'>所选城市</label>";
+                                allCityArr = allCityArr.concat(city_arr);
+                                allCityArr = unique8(allCityArr);
+                                if (delArr.length > 0) {
+                                    for (var j = 0; j < delArr.length; j++) {
+                                        for (var k = 0; k < allCityArr.length; k++) {
+                                            if (delArr[j] == allCityArr[k]) {
+                                                allCityArr.splice(k, 1)
+                                            }
+                                        }
+                                    }
+                                }
+                                for (var j = 0; j < res.data.length; j++) {
+                                    for (var k = 0; k < res.data[j].child.length; k++) {
+                                        data_list.push(res.data[j].child[k])
+                                    }
+                                }
+                                for (var i = 0; i < data_list.length; i++) {
+                                    for (var k = 0; k < allCityArr.length; k++) {
+                                        if (data_list[i].id == allCityArr[k]) {
+                                            city_html += "<input type='checkbox' checked='checked' class='city' name='controll[1][]' title='" + data_list[i].enum_name + "' lay-skin='primary' lay-filter='city' value='" + data_list[i].id + "'>"
+                                        }
+                                    }
+                                }
+                                $('.shis').html(city_html);
+                                form.render('checkbox');
+                            }
+                            form.on('checkbox(city_item)', function (data) {
+                                var isRes = data.elem.checked;
+                                if ($("#sec_list").children().length > 2 && $("#sec_list .city_item").length <= 2) {
+                                    var proid = document.getElementsByClassName('all_city')[0].id;
+                                }
+                                var cityList = document.getElementsByClassName('city_item')
+                                if (city_arr.length == 0) {
+                                    for (var i = 0; i < cityList.length; i++) {
+
+                                        var jqObj = cityList[i];
+                                        if ($(jqObj).prop('checked') == true) {
+                                            city_arr.push(cityList[i].id)
+                                        }
+                                    }
+                                }
+                                if (isRes) {
+                                    for (var i = 0; i < cityList.length; i++) {
+                                        var jqObj = cityList[i];
+                                        if ($(jqObj).prop('checked') == true) {
+                                            city_arr.push(jqObj.id)
+                                            for (var k = 0; k < delArr.length; k++) {
+                                                if (jqObj.id == delArr[k]) {
+                                                    delArr.splice(k, 1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $('.all_city').prop('checked', false);
+                                    for (var i = 0; i < cityList.length; i++) {
+                                        var jqObj = cityList[i];
+                                        for (var k = 0; k < city_arr.length; k++) {
+
+                                            if ($(jqObj).prop('checked') == false) {
+                                                delArr.push(jqObj.id)
+                                            }
+                                            if ($(jqObj).prop('checked') == false && jqObj.id == city_arr[k]) {
+                                                city_arr.splice(k, 1);
+                                            }
+                                        }
+                                    }
+                                }
+                                render_city(proid)
+                            })
+                            //省级列表点击事件
+                            $("#sec_list li").on('click', function () {
+                                var idx = this.id;
+                                var datas = res.data[idx].child;
+                                var cityStr = "<input type='checkbox' id='owner_one' lay-filter='owner_one' title='全选' lay-skin='primary'>";
+                                for (var i = 0; i < datas.length; i++) {
+                                    cityStr += "<input type='checkbox' class='one' name='' title='" + datas[i].enum_name + "'lay-skin='primary'>"
+                                }
+                                $("#city_list").html(cityStr)
+                                $("#city_list").show()
+                                form.render("checkbox");
+                            })
+                            form.render("checkbox");
+                            var proArr = []; //参数数组
+                            //所选城市列表渲染
+                            var showCity = function (proArr, isCheck) {
+                                var cityHtml = "<label class='layui-form-label' style='width:100px;'>所选城市</label>";
+                                for (var k = 0; k < proArr.length; k++) {
+                                    for (var j = 0; j < proArr[k].child.length; j++) {
+                                        var cityData = proArr[k].child[j];
+                                        cityHtml += "<input type='checkbox' class='city' name='controll[1][]' title='" + cityData.enum_name + "' lay-skin='primary' lay-filter='city' value='" + cityData.id + "'><div class='layui-unselect layui-form-checkbox' lay-skin='primary'><span>" + cityData.enum_name + "</span><i class='layui-icon layui-icon-ok'></i></div>"
+                                    }
+                                }
+                                $('.shis').html(cityHtml);
+                                form.render('checkbox');
+                                if (isCheck == 1) {
+                                    $('.city').prop("checked", true)
+                                } else if (isCheck == 2) {
+                                    $('.city').prop("checked", false)
+                                } else if (isCheck == 3) {
+                                    var citys = document.getElementsByClassName('city')
+                                    for (var i = 0; i < citys.length; i++) {
+                                        var curCity = citys[i];
+                                        if ($(curCity).prop('checked') == true) {
+                                            $(curCity).prop('checked', false)
+                                        } else {
+                                            $(curCity).prop('checked', false)
+                                        }
+                                        form.render('checkbox');
+                                    }
+                                } else if (isCheck == 4) {
+                                    var citys = document.getElementsByClassName('city')
+                                    for (var i = 0; i < citys.length; i++) {
+                                        var curCity = citys[i];
+                                        if ($(curCity).prop('checked') == true) {
+                                            $(curCity).prop('checked', false)
+                                        } else {
+                                            $(curCity).prop('checked', false)
+                                        }
+                                        form.render('checkbox');
+                                    }
+                                }
+                                form.render('checkbox');
+                            }
+                            // 省级列表全选。
+                            form.on('checkbox(pro_all)', function (data) {
+                                var a = data.elem.checked;
+                                if (a == true) {
+                                    proArr = res.data;
+                                    showCity(proArr, 1);
+                                    form.render('checkbox');
+                                } else {
+                                    proArr = [];
+                                    showCity(proArr, 2);
+                                    form.render('checkbox');
+                                }
+                            });
+                            //省级列表反选。
+                            form.on('checkbox(pro_res)', function (data) {
+                                var a = data.elem.checked;
+                                if (a == true) {
+                                    showCity(proArr, 3);
+                                    form.render('checkbox');
+                                } else {
+                                    showCity(proArr, 4);
+                                    form.render('checkbox');
+                                }
+                            });
+                        }
+                    })
+                    init_allstatus();
+                } else if (val == 2) {
+                    $('.area_checkbox').css({
+                        display: "block"
+                    });
+                    init_allstatus();
+                } else {
+                    $('.area_checkbox').css({
+                        display: "none"
+                    });
+                }
+            })
+
+            //系统
+            $('.xitong .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+
+                if (val == 0) {
+                    $('.xt').css({display: "none"});
+                    layui.formSelects.value('4', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.xt').css({display: "block"});
+                    layui.formSelects.value('4', []);
+                    $('.xm-select-empty').hide()
+                    if (flagArea[3]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/4',
+                        done: function (res) {
+                            var resdata = res.data;
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='4']").html(dlHtml+dldlhtml);
+                        }
+                    })
+                    flagArea[3] = !flagArea[3];
+                }
+            })
+
+            //版本
+            $('.banben .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 0) {
+                    $('.bb').css({display: "none"});
+                    layui.formSelects.value('10', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.bb').css({display: "block"});
+                    layui.formSelects.value('10', []);
+                    $('.xm-select-empty').hide()
+                    if (flagArea[9]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/10',
+                        done: function (res) {
+                            var resdata = res.data;
+
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='10']").html(dlHtml+dldlhtml);
+                        }
+                    })
+                    flagArea[9] = !flagArea[9];
+                }
+            })
+
+            //浏览器
+            $('.ll .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 0) {
+                    $('.ll_select').css({display: "none"});
+                    layui.formSelects.value('5', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.ll_select').css({display: "block"});
+                    layui.formSelects.value('5', []);
+                    $('.xm-select-empty').hide()
+                    if (flagArea[4]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/5',
+                        done: function (res) {
+                            var resdata = res.data;
+
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='5']").html(dlHtml+dldlhtml);
+                        }
+                    })
+                    flagArea[4] = !flagArea[4];
+                }
+            })
+
+            //屏幕大小
+            $('.screen .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 0) {
+                    $('.screen_select').css({display: "none"});
+                    layui.formSelects.value('8', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.screen_select').css({display: "block"});
+                    layui.formSelects.value('8', []);
+                    $('.xm-select-empty').hide()
+                    if (flagArea[5]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/8',
+                        done: function (res) {
+                            var resdata = res.data;
+
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='8']").html(dlHtml+dldlhtml);
+                        }
+                    })
+                    flagArea[5] = !flagArea[5];
+                }
+            })
+
+            //手机
+            $('.phone .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 0) {
+                    $('.phone_select').css({display: "none"});
+                    layui.formSelects.value('6', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.phone_select').css({display: "block"});
+                    layui.formSelects.value('6', []);
+                    $('.xm-select-empty').hide()
+                    if (flagArea[6]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/6',
+                        done: function (res) {
+                            var resdata = res.data;
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='6']").html(dlHtml+dldlhtml);
+                        }
+                    })
+                    flagArea[6] = !flagArea[6];
+                }
+            })
+
+            //运营商
+            $('.yy .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+                if (val == 0) {
+                    $('.yy_select').css({display: "none"});
+                    layui.formSelects.value('3', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.yy_select').css({display: "block"});
+                    layui.formSelects.value('3', []);
+                    $('.xm-select-empty').hide()
+                    if (flagArea[7]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/3',
+                        done: function (res) {
+                            var resdata = res.data;
+
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='3']").html(dlHtml+dldlhtml);
+                        }
+                    })
+                    flagArea[7] = !flagArea[7];
+                }
+            })
+
+            //来源    获取当前的input框的value值
+            $('.resource .layui-form-radio').on('click', function () {
+                var val = $(this).prev().val();
+
+                if (val == 0) {
+                    $('.resource_select').css({display: "none"});
+                    layui.formSelects.value('7', []);
+                } else if (val == empty_param) {
+                } else if (val != empty_param) {
+                    $('.resource_select').css({display: "block"});
+                    layui.formSelects.value('7', []);
+                    $('.xm-select-empty').hide()
+                    if (flagArea[8]) {
+                        return;
+                    }
+                    admin.req({
+                        type: 'GET',
+                        dataType: "json",
+                        url: domainurl + '/api/v1/enum/controlList/7',
+                        done: function (res) {
+                            var resdata = res.data;
+                            var dlHtml="<dd lay-value=\"\" class=\"xm-select-tips\" style=\"background-color: #FFF!important;\"><div class=\"xm-cz-group\" show=\"null\" style=\"max-width: 246px;\"><div class=\"xm-cz\" method=\"全选\" title=\"全选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-quanxuan\"></i><span>全选</span></div><div class=\"xm-cz\" method=\"清空\" title=\"清空\" style=\"margin-right: 30px\"><i class=\"iconfont icon-qingkong\"></i><span>清空</span></div><div class=\"xm-cz\" method=\"反选\" title=\"反选\" style=\"margin-right: 30px\"><i class=\"iconfont icon-fanxuan\"></i><span>反选</span></div></div><div class=\"xm-cz\" method=\"\" title=\"\"><i class=\"iconfont icon-caidan\"></i><span></span></div></dd>";
+                            var dldlhtml="";
+
+                            for (var i = 0; i < resdata.length; i++) {
+                                dldlhtml+="<dd lay-value='" + resdata[i].id + "' class=''><div class='xm-unselect xm-form-checkbox' lay-skin='primary'><span>" + resdata[i].alias + "</span><i class='xm-icon-yes'></i></div></dd>"
+                            }
+                            $("dl[xid='7']").html(dlHtml+dldlhtml);
+
+                        }
+                    })
+                    flagArea[8] = !flagArea[8];
+                }
+            })
+        }
+        iniAddListener();
+        $('.test-table-reload-btn .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        $('.layui-btn.layuiadmin-btn-tags').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+//表单提交
+        form.on('submit(component-form-demo1)', function (data) {
+//            $('.form-create-sub').submit();
+            admin.req({
+                type: 'POST',
+                dataType: "json",
+                url: domainurl + url,
+                data: $('.form-create-sub').serializeArray(),
+                done: function (res) {
+                    layer.msg(res.msg)
+                }
+            })
+            return false;
+        });
+
+
+        var url = $('.form-create-sub').attr("action");
+        $('.form-create-sub').attr("action", domainurl + url);
+
+
+    });
+</script>
+</body>
+</html>
