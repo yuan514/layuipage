@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layuiAdmin 控制台主页一</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+    <script src="../../layuiadmin/style/jquery-3.2.1.min.js"></script>
+    <!--<script src="../../layuiadmin/style/find.js"></script>-->
+
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="">
+            <!--<div class="layui-row layui-col-space15">-->
+
+            <div class="layui-main" id="LAY-component-layer-list">
+                <h1 style="text-align: center">批量信息查询</h1>
+                <div class="layui-input-block" style="float:left;margin-top:50px;">
+                            <textarea id="search_input" style="width:720px;height:200px;" name="other"
+                                      placeholder="请输入域名，每行输入一个域名，回车换行" class="layui-textarea"></textarea>
+                </div>
+                <!--<div class="layui-inline" style="margin-top:100px;margin-left:50px;">-->
+                <!--<button class="layui-btn layuiadmin-btn-useradmin" lay-submit=""-->
+                <!--lay-filter="LAY-user-front-search" style="width:100px;height:120px;" data-type="test37">-->
+                <!--<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>-->
+                <!--</button>-->
+                <!--</div>-->
+                <div class="layui-inline layui-btn-container layadmin-layer-demo"
+                     style="margin-top:100px;margin-left:50px;">
+                    <button class="layui-btn  layuiadmin-btn-useradmin" lay-filter="LAY-user-front-search"
+                            style="width:100px;height:120px;" >
+
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn "></i>
+                    </button>
+                </div>
+            </div>
+            <div class="layui-fluid" style="margin-top:100px;">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header">域名备案情况</div>
+                            <div class="layui-card-body">
+                                <table id="LAY-user-back-role-one" lay-filter="LAY-user-back-role-df"></table>
+                                <script type="text/html" id="buttonTptype">
+                                    {{#  if(d.beian_record == 1){ }}
+                                    <span class="layui-badge layui-bg-blue">个人</span>
+                                    {{#  } else if(d.beian_record == 2){}}
+                                    <span class="layui-badge layui-bg-gray">企业</span>
+                                    {{#  } else if(d.beian_record ==3){ }}
+                                    <span class="layui-badge layui-bg-orange">事业单位</span>
+                                    {{#  } else if(d.beian_record==4){}}
+                                    <span class="layui-badge layui-bg-green">政府机关</span>
+                                    {{#} else if(d.beian_record==5){}}
+                                    <span class="layui-badge layui-bg-black">社会团体</span>
+                                    {{#} else {}}
+                                    <span class="layui-badge layui-badge">其他</span>
+                                    {{#}}}
+                                </script>
+
+
+                                <script type="text/html" id="buttonTp">
+                                    {{#  if(d.beian_value == "1"){ }}
+                                    <span class="layui-badge layui-bg-green">是</span>
+                                    {{#  } else if(d.beian_value=="0") { }}
+                                    <span class="layui-badge layui-bg-orange">否</span>
+                                    {{#  } else{}}
+                                    <span class="layui-badge layui-bg-orange">其他</span>
+                                    {{#}}}
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-fluid">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header">域名拦截情况</div>
+                            <div class="layui-card-body">
+                                <table id="LAY-user-back-role-two" lay-filter="LAY-user-back-role-df"></table>
+                                <script type="text/html" id="buttonTpwx">
+                                    {{#  if(d.wx_value == 3){ }}
+                                    <span class="layui-badge layui-bg-blue">被拦截</span>
+                                    {{#  } else if(d.wx_value == 0 ){}}
+                                    <span class="layui-badge layui-bg-gray">未检测</span>
+                                    {{#  } else if(d.wx_value ==-2){ }}
+                                    <span class="layui-badge layui-bg-orange">参数或授权异常</span>
+                                    {{#  } else if(d.wx_value==2){}}
+                                    <span class="layui-badge layui-bg-green">正常</span>
+                                    {{#} else if(d.wx_value==4){}}
+                                    <span class="layui-badge layui-bg-black">未知</span>
+                                    {{#} else{}}
+                                    <span class="layui-badge layui-badge">检测返回异常</span>
+                                    {{#}}}
+                                </script>
+
+
+                                <script type="text/html" id="buttonTpqq">
+                                    {{#  if(d.qq_value == 0){ }}
+                                    <span class="layui-badge layui-bg-gray">未检测</span>
+                                    {{#  } else if(d.qq_value == -2 ){}}
+                                    <span class="layui-badge layui-bg-orange">参数或授权异常</span>
+                                    {{#  } else if(d.qq_value ==3){ }}
+                                    <span class="layui-badge layui-bg-green">正常</span>
+                                    {{#  } else if(d.qq_value==2){}}
+                                    <span class="layui-badge layui-bg-blue">被拦截</span>
+                                    {{#} else {}}
+                                    <span class="layui-badge layui-badge">检测返回异常</span>
+                                    {{#}}}
+                                </script>
+                                <script type="text/html" id="buttonTp360">
+                                    {{#  if(d._360_value == 0){ }}
+                                    <span class="layui-badge layui-bg-gray">未检测</span>
+                                    {{#  } else if(d._360_value == -2 ){}}
+                                    <span class="layui-badge layui-bg-orange">参数或授权异常</span>
+                                    {{#  } else if(d._360_value ==3){ }}
+                                    <span class="layui-badge layui-bg-green">正常</span>
+                                    {{#  } else if(d._360_value == 2){}}
+                                    <span class="layui-badge layui-bg-blue">被拦截</span>
+                                    {{#} else{}}
+                                    <span class="layui-badge layui-badge">检测返回异常</span>
+                                    {{#}}}
+                                </script>
+                                <script type="text/html" id="buttonTplj">
+                                    {{#  if(d.result == "y"){ }}
+                                    <span class="layui-badge layui-bg-green">正常</span>
+                                    {{#  } else if(d.result=="n") { }}
+                                    <span class="layui-badge layui-bg-orange">被拦截</span>
+                                    {{#  } else{}}
+                                    <span class="layui-badge layui-bg-orange">其他</span>
+                                    {{#}}}
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="../../config.js"></script>
+<script src="../../layuiadmin/layui/layui.js?t=1"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'table',], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , form = layui.form
+            , table = layui.table
+            , layer = layui.layer;
+
+
+        $('.layui-btn').click(function () {
+            var content = $('#search_input').val();
+
+
+            function getSplitString(str) {
+                var arr = content.split(" ");
+                var resources = "";
+                for (var i = 0; i < arr.length; i++) {
+                    var arr1 = arr[i].split(/\s+/);
+                    domain = arr1;
+                    for (var j = 0; j < arr1.length; j++) {
+                        if (jQuery.trim(arr1[j]) != "") {
+                            resources += jQuery.trim(arr1[j]) + ",";
+                        }
+                    }
+                }
+                return resources;
+            }
+
+            getSplitString();
+            var domain = domain.toString();
+
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+
+            admin.req({
+                type: 'GET',
+                dataType: "json",
+                url: domainName + '/check/check',
+                data: {
+                    "access_token": layui.data('layuiAdmin').access_token,
+                    "domain": domain
+                },
+                done: function (res) {
+
+                    if (res.code == 0) {
+
+                        var formone_data = res.data.beian;
+                        var formtwo_data = res.data.intercept;
+                        layui.use('table', function () {
+                            var table = layui.table;
+//方法级渲染
+                            table.render({
+                                elem: '#LAY-user-back-role-one'
+                                , cols: [[
+                                    {field: 'domain', title: '域名', fixed: true}
+                                    , {field: 'beian_value', templet: '#buttonTp', title: '备案状态',fixed: true}
+                                    , {field: 'beian_record', templet: '#buttonTptype', title: '备案类型', fixed: true}
+                                    , {field: 'beian_icpmc', title: '备案信息', fixed: true}
+                                    , {field: 'beian_icp', title: '备案号',fixed: true}
+                                ]]
+                                , data: formone_data
+                                , id: 'testReload'
+                                , height: 315
+                            });
+                            table.render({
+                                elem: '#LAY-user-back-role-two'
+                                , cols: [[
+                                    {field: 'domain', width: 160, title: '域名', fixed: true}
+                                    , {field: 'qq_value', templet: '#buttonTpqq', title: 'qq'}
+                                    , {field: 'wx_value', templet: '#buttonTpwx', title: '微信'}
+                                    , {field: '_360_value', templet: '#buttonTp360', title: '360'}
+                                    , {field: 'result', templet: '#buttonTplj', title: '拦截状态'}
+                                ]]
+                                , data: formtwo_data
+                                , id: 'testReload'
+                                , height: 315
+                            });
+                        });
+                        table.reload('LAY-user-back-role-one');
+                        layer.close(loadingIndex);
+                    } else {
+                        layer.close(loadingIndex);
+                    }
+                }
+            })
+
+        })
+
+
+    })
+</script>
+<!--<script>-->
+    <!--layui.config({-->
+        <!--base: '../../../layuiadmin/' //静态资源所在路径-->
+    <!--}).extend({-->
+        <!--index: 'lib/index' //主入口模块-->
+    <!--}).use(['index', 'useradmin', 'table', 'laypage'], function () {-->
+        <!--var $ = layui.$-->
+            <!--, form = layui.form-->
+            <!--, admin = layui.admin-->
+            <!--, table = layui.table-->
+            <!--, laypage = layui.laypage;-->
+
+        <!--alert(1)-->
+        <!--//事件   添加域名-->
+        <!--var $ = layui.$, active = {-->
+            <!--search: function () {-->
+                <!--alert(1)-->
+                <!--var content = $('#search_input').val();-->
+<!--//            console.log(content);-->
+
+                <!--function getSplitString(str) {-->
+                    <!--var arr = content.split(" ");-->
+                    <!--var resources = "";-->
+                    <!--for (var i = 0; i < arr.length; i++) {-->
+                        <!--var arr1 = arr[i].split(/\s+/);-->
+                        <!--domain = arr1;-->
+                        <!--for (var j = 0; j < arr1.length; j++) {-->
+                            <!--if (jQuery.trim(arr1[j]) != "") {-->
+                                <!--resources += jQuery.trim(arr1[j]) + ",";-->
+                            <!--}-->
+                        <!--}-->
+                    <!--}-->
+                    <!--return resources;-->
+                <!--}-->
+
+                <!--getSplitString();-->
+                <!--var loadingIndex = layer.load(1, {-->
+                    <!--shade: [0.1, '#fff'] //0.1透明度的白色背景-->
+                <!--});-->
+                <!--admin.req({-->
+                    <!--type: 'GET',-->
+                    <!--dataType: "json",-->
+                    <!--url: domainName + '/check/intercept',-->
+                    <!--data: {-->
+                        <!--"domain": domain,-->
+                        <!--"access_token": layui.data('layuiAdmin').access_token,-->
+                    <!--},-->
+                    <!--done: function (res) {-->
+                        <!--if (res.code == 0) {-->
+
+                            <!--var formone_data = res.data.beian;-->
+                            <!--var formtwo_data = res.data.intercept;-->
+                            <!--layui.use('table', function () {-->
+                                <!--var table = layui.table;-->
+                                <!--//方法级渲染-->
+                                <!--table.render({-->
+                                    <!--elem: '#LAY-user-back-role-one'-->
+                                    <!--, cols: [[-->
+                                        <!--{field: 'domain', title: '域名', fixed: true}-->
+                                        <!--, {field: 'beian_record', templet: '#buttonTptype', title: '备案类型', fixed: true}-->
+                                        <!--, {field: 'beian_name', title: '备案信息', fixed: true}-->
+                                        <!--, {field: 'beian_icpmc', title: '公司', fixed: true}-->
+                                        <!--, {field: 'beian_value', templet: '#buttonTp', title: '备案状态', fixed: true}-->
+                                        <!--, {field: 'beian_icp', title: '备案号', fixed: true}-->
+                                    <!--]]-->
+                                    <!--, data: formone_data-->
+                                    <!--, id: 'testReload'-->
+                                    <!--, height: 315-->
+                                <!--});-->
+                                <!--table.render({-->
+                                    <!--elem: '#LAY-user-back-role-two'-->
+                                    <!--, cols: [[-->
+                                        <!--{field: 'domain', width: 160, title: '域名', fixed: true}-->
+                                        <!--, {field: 'qq_value', templet: '#buttonTpqq', title: 'qq'}-->
+                                        <!--, {field: 'wx_value', templet: '#buttonTpwx', title: '微信'}-->
+                                        <!--, {field: '_360_value', templet: '#buttonTp360', title: '360'}-->
+                                        <!--, {field: 'result', templet: '#buttonTplj', title: '拦截状态'}-->
+                                    <!--]]-->
+                                    <!--, data: formtwo_data-->
+                                    <!--, id: 'testReload'-->
+                                    <!--, height: 315-->
+                                <!--});-->
+                            <!--});-->
+                            <!--table.reload('LAY-user-back-role-one');-->
+                            <!--layer.close(loadingIndex);-->
+                        <!--} else {-->
+                        <!--}-->
+                    <!--}-->
+
+                <!--})-->
+            <!--}-->
+        <!--}-->
+
+        <!--$('.layui-btn.layuiadmin-btn-role').on('click', function () {-->
+            <!--var type = $(this).data('type');-->
+            <!--active[type] ? active[type].call(this) : '';-->
+        <!--});-->
+
+    <!--});-->
+
+
+<!--</script>-->
+</body>
+</html>
+

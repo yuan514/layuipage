@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>个人主页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/template.css" media="all">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="demoTable">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">搜索</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="pack" id="demoReload" placeholder="请输入包号" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end" class="layui-input" id="test-laydate-normal-cn"
+                                   placeholder="" lay-key="1">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layuiadmin-btn-order" data-type="reload" lay-submit
+                                lay-filter="LAY-app-order-search">
+                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="LAY-user-back-role-me" lay-size="lg"
+                   lay-filter="LAY-user-back-role-me"></table>
+            <script type="text/html" id="buttonTpl">
+                {{#  if(d.check == true){ }}
+                <button class="layui-btn layui-btn-xs">已审核</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-primary layui-btn-xs">未审核</button>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'useradmin', 'table', 'laypage', 'laydate'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table
+            , laypage = layui.laypage
+            , laydate = layui.laydate;
+
+
+//        日期
+        laydate.render({
+            elem: '#test-laydate-normal-cn'
+        });
+
+
+//        复杂表头的表格
+//        table.init('test-table-thead1', {
+//            url: layui.setter.base + 'json/table/demo2.js'
+//        });
+
+//        //分页完整功能
+//        laypage.render({
+//            elem: 'test-laypage-demo7'
+//            , count: 100
+//            , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+//            , jump: function (obj) {
+//                console.log(obj)
+//            }
+//        });
+//        $.post('http://c.muban8.net:886/count/list',)
+
+
+//       汇总表
+        table.render({
+            elem: '#LAY-user-back-role-me'
+//             , url: layui.setter.base + 'json/useradmin/test.json' //模拟接口
+            , url: domainName+'/count/list'
+            , cols: [[
+                {field: 'pack', width: 160, fixed: 'left', title: '包号'}
+                , {field: 'date', width: 160, title: '日期'}
+                , {field: 'ldy', width: 160, title: '落地页请求'}
+                , {field: 'ldyt', width: 180, title: '落地页头部加载完成数'}
+                , {field: 'ldyw', width: 180, title: '落地页尾加载完成数'}
+//                , {field: 'ldyw', width: 180, title: '落地页头部ip数'}
+//                , {field: 'ldyw', width: 180, title: '落地页尾部ip数'}
+                , {field: 'qx', width: 160, title: '取消按钮点击次数'}
+                , {field: 'qr', width: 160, title: '确认点击'}
+                , {field: 'dl', width: 140, title: '独立ip下载数'}
+                , {field: 'fin', width: 160, title: '独立IP下载完成数'}
+                , {field: 'agt-dl', width: 160, title: '代理下载数'}
+                , {field: 'agt-fin', width: 160, title: '代理下载完成数'}
+                , {field: 'tot-dl', width: 160, title: '总计下载数'}
+                , {field: 'tot-fin', width: 160, fixed: 'right', title: '总计下载完成数'}
+            ]]
+            , id: 'testReload'
+            , page: true
+            , text: '对不起，加载出现异常！'
+        });
+
+
+//        监听搜索
+        form.on('submit(LAY-app-order-search)', function (data) {
+            console.log(data);
+            var field = data.field;
+            console.log(field);
+
+//          执行重载
+            table.reload('LAY-user-back-role-me', {
+                page: {
+                    curr: 1
+                },
+                where: field
+            });
+        });
+
+
+        $('.layui-btn.layuiadmin-btn-role').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+//        console.log($('.layui-table-body .layui-table-cell').val())
+//        console.log($('.layui-table-body .laytable-cell-15-ldy').html())
+//        if ($('.layui-table-body .layui-table-cell').val() === undefined) {
+//            $('.layui-table-body .laytable-cell-15-ldy').html('0');
+//        } else {
+//
+//        }
+
+    });
+
+</script>
+</body>
+</html>

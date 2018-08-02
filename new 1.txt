@@ -1,0 +1,16 @@
+落地页基础配置
+    域名配置     component/nav/index
+	apk文件上传 component/tabs/index
+	apk代理规则 component/progress/index
+	海南技巧    component/panel/index
+	乐樽技巧    component/badge/index
+	落地页模块管理 component/timeline/index
+	技巧配置     component/anim/index
+统计 
+    汇总表   template/personalpage
+短信配置
+    手机号配置  app/message/index
+	短信日志    app/workorder/list
+页面拦截检测
+    浏览器拦截  user/user/list
+	域名备案    user/administrators/list
